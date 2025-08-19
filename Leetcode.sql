@@ -1,5 +1,5 @@
-Q1. Recyclable and Low Fat Products
-
+/* Q1. Recyclable and Low Fat Products */
+/*
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -14,14 +14,15 @@ recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this produc
 
 Write a solution to find the ids of products that are both low fat and recyclable.
 Return the result table in any order.
+*/
 
 A1.
 select product_id from products
 where low_fats = 'Y' and recyclable = 'Y';
 
 ------------------------------------------------------------------------------------------------------------------------
-Q2. Find Customer Referee
-
+/* Q2. Find Customer Referee */
+/*
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -38,6 +39,7 @@ Find the names of the customer that are either:
 referred by any customer with id != 2.
 not referred by any customer.
 Return the result table in any order.
+*/
 
 A2.
 **오답**
@@ -51,8 +53,8 @@ from customer
 where referee_id <> '2' or referee_id is NULL;
 
 ------------------------------------------------------------------------------------------------------------------------
-Q3. Big Countries
-
+/* Q3. Big Countries */
+/*
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -73,6 +75,7 @@ it has a population of at least twenty-five million (i.e., 25000000).
 Write a solution to find the name, population, and area of the big countries.
 
 Return the result table in any order.
+*/
 
 A3.
 **오답**
@@ -89,8 +92,8 @@ area >= 3000000 or
 population >= 25000000;
 
 ------------------------------------------------------------------------------------------------------------------------
-Q4. Article Views
-
+/* Q4. Article Views */
+/*
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -107,13 +110,49 @@ Note that equal author_id and viewer_id indicate the same person.
 Write a solution to find all the authors that viewed at least one of their own articles.
 
 Return the result table sorted by id in ascending order.
+*/
 
+A4.
+**오답**
+select author_id from Views
+where author_id = viewer_id
+order by author_id;
+-> 중복 검증 안됨
+-> 컬럼명 확인
 
+select author_id as id from Views
+where author_id = viewer_id
+group by author_id
+order by author_id;
+-> group by 대신 select distinct가 더 나은 듯
+-> order by 절에 alias로 id를 넣어도 가능
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q5. Invalid Tweets */
+/*
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| tweet_id       | int     |
+| content        | varchar |
++----------------+---------+
+tweet_id is the primary key (column with unique values) for this table.
+content consists of alphanumeric characters, '!', or ' ' and no other special characters.
+This table contains all the tweets in a social media app.
+ 
 
+Write a solution to find the IDs of the invalid tweets. The tweet is invalid if the number of characters used in the content of the tweet is strictly greater than 15.
 
+Return the result table in any order.
+*/
 
+A5.
+SELECT tweet_id from Tweets
+where length(content) > 15;
+-> LENGTH() 는 Byte 수 기준으로 저장 공간 기준, CHAR_LENGTH() 는 글자 수 기준
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q6. Replace Employee ID With The Unique Identifier */
 
 
 
