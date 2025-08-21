@@ -365,12 +365,167 @@ and a.temperature > b.temperature;
 (DATEDIFF 구문도 사용 가능)
 
 ------------------------------------------------------------------------------------------------------------------------ 
-/* Q10. 
+/* Q10. Average Time of Process per Machine */
+/*
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| machine_id     | int     |
+| process_id     | int     |
+| activity_type  | enum    |
+| timestamp      | float   |
++----------------+---------+
+The table shows the user activities for a factory website.
+(machine_id, process_id, activity_type) is the primary key (combination of columns with unique values) of this table.
+machine_id is the ID of a machine.
+process_id is the ID of a process running on the machine with ID machine_id.
+activity_type is an ENUM (category) of type ('start', 'end').
+timestamp is a float representing the current time in seconds.
+'start' means the machine starts the process at the given timestamp and 'end' means the machine ends the process at the given timestamp.
+The 'start' timestamp will always be before the 'end' timestamp for every (machine_id, process_id) pair.
+It is guaranteed that each (machine_id, process_id) pair has a 'start' and 'end' timestamp.
+ 
 
+There is a factory website that has several machines each running the same number of processes. Write a solution to find the average time each machine takes to complete a process.
 
+The time to complete a process is the 'end' timestamp minus the 'start' timestamp. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run.
 
+The resulting table should have the machine_id along with the average time as processing_time, which should be rounded to 3 decimal places.
 
+Return the result table in any order.
+*/
 
+A10.
+ **오답**
+SELECT machine_id, S.timestamp
+round(avg(????) over (partition by process_id,3) as processing_time
+from 
+ (select machine_id, process_id, 
+ from activity
+ group by process_id
+ -> 노답
+
+ select A.machine_id,
+        round(avg(B.timestamp - A.timestamp), 3) as processing_time
+ from activity A
+ join activity B
+ on A.machine_id = b.machine_id
+ where A.activity_type = 'start' and B.activity_type = 'end'
+ group by A.machine_id
+ -> 먼저 Start와 end의 timestamp를 가진 2개의 테이블을 정의하고, machine_id 키값으로 self join하며 그룹핑.
+ 그 다음 end에서 start timestamp를 뺀 값을 평균하여 소수점 3째자리까지 반올림한다.
+
+ ------------------------------------------------------------------------------------------------------------------------ 
+ /* Q11. Employee Bonus */
+ /*
+ +-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| empId       | int     |
+| name        | varchar |
+| supervisor  | int     |
+| salary      | int     |
++-------------+---------+
+empId is the column with unique values for this table.
+Each row of this table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
+ 
+
+Table: Bonus
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| empId       | int  |
+| bonus       | int  |
++-------------+------+
+empId is the column of unique values for this table.
+empId is a foreign key (reference column) to empId from the Employee table.
+Each row of this table contains the id of an employee and their respective bonus.
+ 
+
+Write a solution to report the name and bonus amount of each employee with a bonus less than 1000.
+
+Return the result table in any order.
+ */
+
+ A11.
+ **오답**
+ select A.name,
+ B.bonus
+ from employee A
+ left outer join Bonus B
+ on A.empid = B.empid
+ where B.bonus < 1000;
+-> 모든 직원들 조회해야 함. 즉 조건에 부합하지 않으면 null로 표시 필요
+
+ select A.name, B.bonus
+ from employee A
+ left outer join Bonus B
+ on A.empid = B.empid
+where B.bonus < 1000;
+-> 보너스가 없는 애들은 조회되지 않음
+
+  select A.name, B.bonus
+ from employee A
+ left outer join Bonus B
+ on A.empid = B.empid
+where B.bonus < 1000 or B.bonus is NULL;
+
+ ------------------------------------------------------------------------------------------------------------------------ 
+/* Q12. Students and Examinations */
+/*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key (column with unique values) for this table.
+Each row of this table contains the ID and the name of one student in the school.
+ 
+
+Table: Subjects
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| subject_name | varchar |
++--------------+---------+
+subject_name is the primary key (column with unique values) for this table.
+Each row of this table contains the name of one subject in the school.
+ 
+
+Table: Examinations
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| student_id   | int     |
+| subject_name | varchar |
++--------------+---------+
+There is no primary key (column with unique values) for this table. It may contain duplicates.
+Each student from the Students table takes every course from the Subjects table.
+Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
+ 
+
+Write a solution to find the number of times each student attended each exam.
+
+Return the result table ordered by student_id and subject_name.
+*/
+
+A12.
+SELECT A.student_id,
+       A.student_name,
+       B.subject_name,
+       count(C.student_id) as attended_exams
+from Students A
+cross join Subjects B
+left outer join examinations C
+on A.student_id = C.student_id
+and B.subject_name = C.subject_name
+group by A.student_id, A.student_name, B.subject_name
+order by A.student_id, B.subject_name;
+-> 복습 필수
 
 
 
