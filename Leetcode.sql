@@ -251,6 +251,121 @@ on Product.product_id = Sales.product_id;
 ------------------------------------------------------------------------------------------------------------------------
 /* Q8. Customer Who Visited but Did Not Make Any Transactions */
 /*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| visit_id    | int     |
+| customer_id | int     |
++-------------+---------+
+visit_id is the column with unique values for this table.
+This table contains information about the customers who visited the mall.
+ 
+
+Table: Transactions
+
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| transaction_id | int     |
+| visit_id       | int     |
+| amount         | int     |
++----------------+---------+
+transaction_id is column with unique values for this table.
+This table contains information about the transactions made during the visit_id.
+ 
+
+Write a solution to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
+
+Return the result table sorted in any order.
+*/
+
+A8.
+**오답**
+ SELECT A.customer_id, count(*)
+ from Visits A inner join Transactions B
+where not A.visit_id = B.visit_id;
+-> inner join을 해버리면 이미 거래가 있는 방문만 남음
+
+ SELECT A.customer_id, count(*)
+ from Visits A left outer join Transactions B
+ on A.visit_id = B.visit_id
+where B.visit_id is null;
+-> 일부 DBMS에서는 임의의 customer_id만 나올 수 있음
+
+ SELECT A.customer_id, count(*) as count_no_trans
+ from Visits A left outer join Transactions B
+ on A.visit_id = B.visit_id
+where B.visit_id is null
+group by customer_id;
+
+ SELECT A.customer_id, count(*) as count_no_trans
+ from Visits A  
+where not exists (select visit_id from Transactions B where A.visit_id = B.visit_id)
+group by customer_id;
+
+select A.customer_id, count(*) as count_no_trans
+from Visits A
+where A.visit_id not in (select visit_id from Transactions B where A.visit_id = B.visit_id)
+group by customer_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q9. Rising Temperature */
+/*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| recordDate    | date    |
+| temperature   | int     |
++---------------+---------+
+id is the column with unique values for this table.
+There are no different rows with the same recordDate.
+This table contains information about the temperature on a certain day.
+ 
+
+Write a solution to find all dates' id with higher temperatures compared to its previous dates (yesterday).
+
+Return the result table in any order.
+*/
+
+A9.
+ **오답**
+ SELECT id
+ from
+ ( select recorddate, temperature, LAG(temperature) over (ORDER BY recorddate) as lag_temp
+ from Weather)
+where temperature > lag_temp;
+-> 가져온 테이블은 alias 필요
+
+ SELECT id
+ from
+ ( select recorddate, temperature, LAG(temperature) over (ORDER BY recorddate) as lag_temp
+ from Weather) L
+where temperature > lag_temp;
+-> id 필드 명시하지 않음
+
+ SELECT id
+ from
+ ( select id, recorddate, temperature, LAG(temperature) over (ORDER BY recorddate) as lag_temp
+ from Weather) L
+where temperature > lag_temp;
+
+select A.id
+from weather A
+cross join weather B
+where A.recorddate - B.recorddate = 1
+and a.temperature > b.temperature;
+(CROSS JOIN도 사용 가능함. 조건을 잘 줘야함)
+
+select A.Id
+from weather A
+cross join weather B
+where DATEDIFF(A.recorddate, b.recorddate) = 1
+and a.temperature > b.temperature;
+(DATEDIFF 구문도 사용 가능)
+
+------------------------------------------------------------------------------------------------------------------------ 
+/* Q10. 
 
 
 
