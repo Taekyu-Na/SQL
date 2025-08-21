@@ -153,6 +153,108 @@ where length(content) > 15;
 
 ------------------------------------------------------------------------------------------------------------------------
 /* Q6. Replace Employee ID With The Unique Identifier */
+ /*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
++---------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains the id and the name of an employee in a company.
+ 
+
+Table: EmployeeUNI
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| unique_id     | int     |
++---------------+---------+
+(id, unique_id) is the primary key (combination of columns with unique values) for this table.
+Each row of this table contains the id and the corresponding unique id of an employee in the company.
+ 
+
+Write a solution to show the unique ID of each user, If a user does not have a unique ID replace just show null.
+
+Return the result table in any order.
+*/
+
+A6.
+ **오답**
+SELECT unique_id from EmployeeUNI right outer join Employees
+on id = id;
+-> left outer join이 맞음. right outer는 UNI를 기준으로 함
+-> ID = ID하면 자기 자신끼리 비교하게 되므로 항상 TRUE가 나옴. 테이블의 컬럼 명시 필요.
+
+ SELECT unique_id from EmployeeUNI left outer join Employees
+on Employees.id = EmployeeUNI.id;
+-> Employees 테이블이 기준이어야 함.
+
+ SELECT unique_id from Employees left outer join EmployeeUNI
+on Employees.id = EmployeeUNI.id;
+
+ SELEct EmployeeUNI.unique_id, employees.name from Employees left outer join EmployeeUNI
+on Employees.id = EmployeeUNI.id;
+
+SELECT
+ B.unique_id,
+ A.name
+ from Employees A
+ left outer join EmployeeUNI B
+ on A.id = B.id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q7. Product Sales Analysis 1 */
+/*
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| sale_id     | int   |
+| product_id  | int   |
+| year        | int   |
+| quantity    | int   |
+| price       | int   |
++-------------+-------+
+(sale_id, year) is the primary key (combination of columns with unique values) of this table.
+product_id is a foreign key (reference column) to Product table.
+Each row of this table shows a sale on the product product_id in a certain year.
+Note that the price is per unit.
+ 
+
+Table: Product
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| product_id   | int     |
+| product_name | varchar |
++--------------+---------+
+product_id is the primary key (column with unique values) of this table.
+Each row of this table indicates the product name of each product.
+ 
+
+Write a solution to report the product_name, year, and price for each sale_id in the Sales table.
+
+Return the resulting table in any order.
+*/
+
+A7.
+ SELECT
+Product.product_name,
+Sales.year,
+Sales.price
+from Sales  inner join Product
+on Product.product_id = Sales.product_id;
+(ALIAS 사용하면 Runtime이 느려짐?)
+------------------------------------------------------------------------------------------------------------------------
+/* Q8. Customer Who Visited but Did Not Make Any Transactions */
+/*
+
+
+
+
 
 
 
