@@ -738,9 +738,111 @@ Return the result table in any order.
 */
 
 A17.
+SELECT A.project_id,
+       round(avg(B.experience_years), 2) as average_years
+from Project A
+left outer join Employee B
+on A.employee_ID = B.employee_id
+group by A.project_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q18. Percentage of Users Attended a Contest */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| user_id     | int     |
+| user_name   | varchar |
++-------------+---------+
+user_id is the primary key (column with unique values) for this table.
+Each row of this table contains the name and the id of a user.
  
 
+Table: Register
 
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| contest_id  | int     |
+| user_id     | int     |
++-------------+---------+
+(contest_id, user_id) is the primary key (combination of columns with unique values) for this table.
+Each row of this table contains the id of a user and the contest they registered into.
+ 
+
+Write a solution to find the percentage of the users registered in each contest rounded to two decimals.
+
+Return the result table ordered by percentage in descending order. In case of a tie, order it by contest_id in ascending order.
+*/
+
+A18.
+SELECT contest_id,
+       round(count(user_id)/(select count(user_id) from Users)*100, 2) as percentage
+       from Register
+       GROUP BY contest_id
+       order by percentage desc, contest_id asc;
+(SQL에서 정수 나눗셈과 실수 나눗셈이 다르게 동작할 수 있다 함. 예를 들어, 1/2 = 0 이 될 수도 있고, 0.5가 될 수도 있음.
+ 따라서 하나를 실수로 바꿔서 계산하는게 안전)
+
+SELECT contest_id,
+       round(count(user_id)*100.0/(select count(user_id) from Users), 2) as percentage
+       from Register
+       GROUP BY contest_id
+       order by percentage desc, contest_id asc;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q19. Queries Quality and Percentage */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| query_name  | varchar |
+| result      | varchar |
+| position    | int     |
+| rating      | int     |
++-------------+---------+
+This table may have duplicate rows.
+This table contains information collected from some queries on a database.
+The position column has a value from 1 to 500.
+The rating column has a value from 1 to 5. Query with rating less than 3 is a poor query.
+ 
+
+We define query quality as:
+
+The average of the ratio between query rating and its position.
+
+We also define poor query percentage as:
+
+The percentage of all queries with rating less than 3.
+
+Write a solution to find each query_name, the quality and poor_query_percentage.
+
+Both quality and poor_query_percentage should be rounded to 2 decimal places.
+
+Return the result table in any order.
+*/
+
+A19.
+**오답**
+ SELECT query_name,
+       round((avg(rating/position)), 2) as quality,
+       round((select count(distinct (rating)) from Queries
+       where rating < 3)*100.0/count(distinct (rating)), 2) as poor_query_percentage
+from Queries
+group by query_name;
+-> "Duplicate row"가 있다고 해서 항상 distinct를 써야하는게 아님. 전체 데이터에서 횟수를 구해야 하는 경우에는 distinct를 쓰면 안됨
+-> "논리적 수행 순서에 따라서 서브쿼리 안에 WHERE RATING < 3을 해버리면 미리 WHERE 조건으로 데이터를 분류해버림"
+"FROM > WHERE > GROUP BY > HAVING > SELECT > ORDER BY"
+
+SELECT query_name,
+       round((avg(rating/position)), 2) as quality,
+       round(sum(CASE WHEN rating <3 THEN 1
+       else 0 end)*100.0/count(rating), 2) as poor_query_percentage
+from Queries
+group by query_name;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q20. 
 
 
 
