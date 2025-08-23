@@ -527,5 +527,230 @@ group by A.student_id, A.student_name, B.subject_name
 order by A.student_id, B.subject_name;
 -> 복습 필수
 
+------------------------------------------------------------------------------------------------------------------------
+ /* Q13. Managers with at Least 5 Direct Reports */
+ /*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| department  | varchar |
+| managerId   | int     |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the name of an employee, their department, and the id of their manager.
+If managerId is null, then the employee does not have a manager.
+No employee will be the manager of themself.
+ 
+
+Write a solution to find managers with at least five direct reports.
+
+Return the result table in any order.
+ */
+
+ A13.
+ **오답**
+select A.name, count(A.id) from Employee A
+left outer join Employee B
+on A.id = B.id
+where count(A.id) <= 5;
+-> "Invalid use of group function" 에러 뜸. Group함수를 잘못 사용함. WHERE 절이 아닌 GROUP BY and Having을 써보자
+-> "A.id = B.id"를 쓰면 항상 같은 사람끼리만 매칭됨.
+
+ select A.name from Employee A
+left outer join Employee B
+on A.id = B.managerid
+group by A.id
+having count(B.managerid) >= 5;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q14. Confirmation Rate */
+/*
++----------------+----------+
+| Column Name    | Type     |
++----------------+----------+
+| user_id        | int      |
+| time_stamp     | datetime |
+| action         | ENUM     |
++----------------+----------+
+(user_id, time_stamp) is the primary key (combination of columns with unique values) for this table.
+user_id is a foreign key (reference column) to the Signups table.
+action is an ENUM (category) of the type ('confirmed', 'timeout')
+Each row of this table indicates that the user with ID user_id requested a confirmation message at time_stamp and that confirmation message was either confirmed ('confirmed') or expired without confirming ('timeout').
+ 
+
+The confirmation rate of a user is the number of 'confirmed' messages divided by the total number of requested confirmation messages. The confirmation rate of a user that did not request any confirmation messages is 0. Round the confirmation rate to two decimal places.
+
+Write a solution to find the confirmation rate of each user.
+
+Return the result table in any order.
+*/
+
+A14.
+**오답**
+Select A.user_id,
+       count(B.action = "confirmed") as conf_count,
+       count(B.action) as act_count,
+       round(, 2) as confirmation_rate
+from Signups A left outer join Confirmations B
+on A.user_id = B.user_id
+group by B.user_id;
+-> count 구문에 =를 쓰면 T/F가 되기 때문에 갯수를 셀 수 없음
+
+Select A.user_id,
+       round(AVG(CASE WHEN B.action = 'confirmed' then 1
+       else 0
+       end), 2) as confirmation_rate
+from Signups A left outer join Confirmations B
+on A.user_id = B.user_id
+group by B.user_id;
+(avg를 사용하면 1/0에 의해 'confirmed' 비율을 바로 구할 수 있음)
+-> B 테이블로 그룹핑하면 B 테이블의 결과만 보여줌
+
+select A.user_id,
+       round(avg(case
+       when B.action = 'confirmed' then 1
+       else 0 end), 2) as confirmation_rate
+    from signups A
+    left outer join confirmations B
+    on A.user_id = B.user_id
+group by A.user_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q15. Not Boring Moves */
+/*
++----------------+----------+
+| Column Name    | Type     |
++----------------+----------+
+| id             | int      |
+| movie          | varchar  |
+| description    | varchar  |
+| rating         | float    |
++----------------+----------+
+id is the primary key (column with unique values) for this table.
+Each row contains information about the name of a movie, its genre, and its rating.
+rating is a 2 decimal places float in the range [0, 10]
+ 
+
+Write a solution to report the movies with an odd-numbered ID and a description that is not "boring".
+
+Return the result table ordered by rating in descending order.
+*/
+
+A15.
+SELECT * from Cinema
+where id % 2 = 1
+and description not like 'boring'
+order by rating desc;
+
+SELECT * from Cinema
+where MOD(id,2) = 1
+and description not like 'boring'
+order by rating desc;
+(%, MOD 둘다 사용 가능)
+(이번 경우 NOT LIKE를 써도 됐지만, 경우에 따라 위험할 수 있으므로 <>나 !=를 쓰는게 좋음)
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q16. Average Selling Price */
+/*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| start_date    | date    |
+| end_date      | date    |
+| price         | int     |
++---------------+---------+
+(product_id, start_date, end_date) is the primary key (combination of columns with unique values) for this table.
+Each row of this table indicates the price of the product_id in the period from start_date to end_date.
+For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
+ 
+
+Table: UnitsSold
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| purchase_date | date    |
+| units         | int     |
++---------------+---------+
+This table may contain duplicate rows.
+Each row of this table indicates the date, units, and product_id of each product sold. 
+ 
+
+Write a solution to find the average selling price for each product. average_price should be rounded to 2 decimal places. If a product does not have any sold units, its average selling price is assumed to be 0.
+
+Return the result table in any order.
+*/
+
+A16.
+ **결과는 맞지만 로직이 틀림**
+Select A.product_id,
+       round(sum((A.price*B.units))/sum(B.units), 2) as average_price
+from Prices A
+left outer join UnitsSold b
+on A.product_id = B.product_id
+where B.purchase_date between A.start_date and A.end_date
+group by A.product_id;
+-> "left outer join에 위 where 절을 넣으면 "판매량이 없으면 평균가 = 0" 이라는 조건을 만족하지 못함. 즉, LEFT JOIN의 의미가 사라짐
+ 따라서 where 대신 on을 줘야함"
+
+Select A.product_id,
+       round(IFNULL((sum(A.price*B.units)/sum(B.units)), 0), 2) as average_price
+from Prices A
+left outer join UnitsSold b
+on A.product_id = B.product_id
+and B.purchase_date between A.start_date and A.end_date
+group by A.product_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q17. Project Employees 1 */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| project_id  | int     |
+| employee_id | int     |
++-------------+---------+
+(project_id, employee_id) is the primary key of this table.
+employee_id is a foreign key to Employee table.
+Each row of this table indicates that the employee with employee_id is working on the project with project_id.
+ 
+
+Table: Employee
+
++------------------+---------+
+| Column Name      | Type    |
++------------------+---------+
+| employee_id      | int     |
+| name             | varchar |
+| experience_years | int     |
++------------------+---------+
+employee_id is the primary key of this table. It's guaranteed that experience_years is not NULL.
+Each row of this table contains information about one employee.
+ 
+
+Write an SQL query that reports the average experience years of all the employees for each project, rounded to 2 digits.
+
+Return the result table in any order.
+*/
+
+A17.
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
