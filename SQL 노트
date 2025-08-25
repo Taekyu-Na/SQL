@@ -1,0 +1,4 @@
+1. Date 관련
+**MySQL에서 date 타입 필드에서 특정 연/월/일를 가져올때는 아래처럼 가져올 수 있음.
+SELECT DATE_FORMAT(TEST, '%Y-%m')
+
