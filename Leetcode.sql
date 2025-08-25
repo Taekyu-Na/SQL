@@ -864,6 +864,73 @@ Return the result table in any order.
 */
 
 A20.
+**오답**
+SELECT date_format(trans_date, '%Y-%m') as month,
+       country,
+       count(trans_date) as trans_count,
+       (select count(month) from transactions where state = 'approved') as approved_count,
+       sum(amount) as trans_total_amount,
+       (select sum(amount) from transactions where state = 'approved') as approved_total_amount
+from transactions
+group by country, month;
+-> select 절 안에서 where를 포함한 서브쿼리를 넣어버리니 group by가 먹히기 전에 데이터가 확정됨
+
+SELECT date_format(trans_date, '%Y-%m') as month,
+       country,
+       count(trans_date) as trans_count,
+       count(case when state = 'approved' then 1 else 0 end) as approved_count,
+       sum(amount) as trans_total_amount,
+       sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
+from transactions
+group by country, month;
+-> CASE 문으로 나눠서 COUNT와 sum을 구할 수 있음
+-> 단, count에서 "else 0"을 써버리면 0도 카운드 되기 때문에 NULL을 사용해야함
+
+SELECT date_format(trans_date, '%Y-%m') as month,
+       country,
+       count(trans_date) as trans_count,
+       count(case when state = 'approved' then 1 else null end) as approved_count,
+       sum(amount) as trans_total_amount,
+       sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
+from transactions
+group by country, month;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q21. Immediate Food Delivery 2 */
+/*
++-----------------------------+---------+
+| Column Name                 | Type    |
++-----------------------------+---------+
+| delivery_id                 | int     |
+| customer_id                 | int     |
+| order_date                  | date    |
+| customer_pref_delivery_date | date    |
++-----------------------------+---------+
+delivery_id is the column of unique values of this table.
+The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
+ 
+
+If the customer's preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+
+The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+
+Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
+*/
+
+A21.
+**오답**
+SELECT (count(case when order_date = customer_pref_delivery_date then 1 else null end))*100.0/(count(delivery_id)) as immediate_percentage
+from delivery
+group by customer_id;
+-> "customer_id로 group by하면 고객별인데 문제가 요구하는건 모든 고객의 전체 비율"
+-> "첫 주문에 대한 조건 없음"
+
+select round(count(case when order_date = customer_pref_delivery_date then 1 else null end)*100.0/count(delivery_id), 2) as immediate_percentage
+from delivery
+where (customer_id, order_date) IN
+(select customer_id, min(order_date)
+from delivery
+group by customer_id);
 
 
 
