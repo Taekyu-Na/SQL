@@ -974,15 +974,309 @@ group by player_id)
 ------------------------------------------------------------------------------------------------------------------------
 /* Q23. Number of Unique Subjects Taught by Each Teacher */
 /*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| teacher_id  | int  |
+| subject_id  | int  |
+| dept_id     | int  |
++-------------+------+
+(subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
+Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
+ 
 
+Write a solution to calculate the number of unique subjects each teacher teaches in the university.
 
+Return the result table in any order.
+*/
 
+A23.
+**오답**
+SELECT teacher_id,
+       count(distinct subject_id, dept_id) as cnt
+    from Teacher
+group by teacher_id;
+-> 고유 과목 수만 고르면 됨
+-> MySQL은 COUNT(DISTINCT col1, col2)를 지원하지만, 대부분의 SQL (PostgreSQL, Oracle, SQL Server)은 이 문법을 지원하지 않음.
 
+SELECT teacher_id,
+       count(distinct subject_id) as cnt
+    from Teacher
+group by teacher_id;
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q24. User Activity for the Past 30 Days 1 */
+/*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| session_id    | int     |
+| activity_date | date    |
+| activity_type | enum    |
++---------------+---------+
+This table may have duplicate rows.
+The activity_type column is an ENUM (category) of type ('open_session', 'end_session', 'scroll_down', 'send_message').
+The table shows the user activities for a social media website. 
+Note that each session belongs to exactly one user.
+ 
 
+Write a solution to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least one activity on that day.
 
+Return the result table in any order.
+*/
 
+A24.
+SELECT activity_date as day,
+       count(distinct user_id) as active_users
+    from Activity
+where activity_date between '2019-06-28' and '2019-07-27'
+group by activity_date;
+(일자에는 따옴표 필요)
+(WHERE 절에 BETWEEN AND 도 가능하고 >,< 도 가능)
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q25. Product Sales Analysis 3 */
+/*
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| sale_id     | int   |
+| product_id  | int   |
+| year        | int   |
+| quantity    | int   |
+| price       | int   |
++-------------+-------+
+(sale_id, year) is the primary key (combination of columns with unique values) of this table.
+product_id is a foreign key (reference column) to Product table.
+Each row records a sale of a product in a given year.
+A product may have multiple sales entries in the same year.
+Note that the per-unit price.
+
+Write a solution to find all sales that occurred in the first year each product was sold.
+
+For each product_id, identify the earliest year it appears in the Sales table.
+
+Return all sales entries for that product in that year.
+
+Return a table with the following columns: product_id, first_year, quantity, and price.
+Return the result in any order.
+*/
+
+A25.
+**오답**
+SELECT product_id,
+       year as first_year,
+       quantity as quantity,
+       price as price
+    from Sales
+where year in (select min(year))
+group by product_id;
+-> WHERE로 인해서 가장 빠른 연도 하나만 구해오게됨
+-> select from이 없음
+
+SELECT product_id,
+       year as first_year,
+       quantity as quantity,
+       price as price
+    from Sales
+where (product_id, year) in
+(select product_id, min(year)
+FROM Sales
+group by product_id);
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q26. Classes With at Least 5 Students */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| student     | varchar |
+| class       | varchar |
++-------------+---------+
+(student, class) is the primary key (combination of columns with unique values) for this table.
+Each row of this table indicates the name of a student and the class in which they are enrolled.
+ 
+
+Write a solution to find all the classes that have at least five students.
+
+Return the result table in any order.
+*/
+
+A26.
+SELECT class
+from Courses
+group by class
+having count(student) >= 5;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q27. Find Followers Count */
+/*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| user_id     | int  |
+| follower_id | int  |
++-------------+------+
+(user_id, follower_id) is the primary key (combination of columns with unique values) for this table.
+This table contains the IDs of a user and a follower in a social media app where the follower follows the user.
+ 
+
+Write a solution that will, for each user, return the number of followers.
+
+Return the result table ordered by user_id in ascending order.
+*/
+
+A27.
+SELECT user_id,
+       count(follower_id) as followers_count
+    from Followers
+group by user_id
+order by user_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q28. Biggest Single Number */
+/*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| num         | int  |
++-------------+------+
+This table may contain duplicates (In other words, there is no primary key for this table in SQL).
+Each row of this table contains an integer.
+ 
+
+A single number is a number that appeared only once in the MyNumbers table.
+
+Find the largest single number. If there is no single number, report null.
+*/
+
+A28.
+SELECT (case when num = A.num THEN max(a.num) else null end) as num
+from
+(SELECT num
+    from MyNumbers
+    group by num
+    HAVING count(num) = 1) as A;
+(맞지만 몇가지 문제점 있음. 첫째, num 컬럼 불명확함. from 절에 A라는 서브쿼리만 존재함. 다라서 num은 a.numm으로만 참조 가능)
+(case문 불필요함. single number가 없으면 "MAX()"는 자동으로 null 반환함)
+
+SELECT max(A.num) as num
+from
+(SELECT num
+    from MyNumbers
+    group by num
+    HAVING count(num) = 1) as A;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q29. Customers Who Bought All Products */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| customer_id | int     |
+| product_key | int     |
++-------------+---------+
+This table may contain duplicates rows. 
+customer_id is not NULL.
+product_key is a foreign key (reference column) to Product table.
+ 
+
+Table: Product
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_key | int     |
++-------------+---------+
+product_key is the primary key (column with unique values) for this table.
+ 
+
+Write a solution to report the customer ids from the Customer table that bought all the products in the Product table.
+
+Return the result table in any order.
+*/
+
+A29.
+**오답**
+select a.customer_id
+FROM Customer A
+inner join Product B
+on A.product_key = B.product_key
+group by A.customer_id, A.product_key
+having count(distinct(a.customer_id, a.product_key)) = 2;
+-> 고객/상품별이 아니라 고객별로 산 상품 개수를 구하는거니까 GROUP BY a.customer_id만 있어야 함
+-> count(distinct)에서 col1, col2를 지원안함. 고객별로 다른 상품을 산 것을 구해야 하니까 a.product_key를 고유로 잡아야 함)
+-> "2"로 하드코딩이 되어있음. 모든 제품을 구매한 고객을 찾는건데 2개로 하드코딩하면 안됨.
+
+select a.customer_id
+FROM Customer A
+inner join Product B
+on A.product_key = B.product_key
+group by A.customer_id
+having count(distinct(a.product_key)) = count(b.product_key);
+-> 맨 뒤에 "count(b.product_key)"가 GROUP BY A.customer_id 기준으로 세어지기 때문에 고객이 구매한 행의 수를 세는 것으로 로직이 이상해짐
+
+select a.customer_id
+FROM Customer A
+inner join Product B
+on A.product_key = B.product_key
+group by A.customer_id
+having count(distinct(a.product_key)) = (SELECT count(product_key) from Product);
+
+select customer_id
+    from Customer
+group by customer_id
+having count(distinct product_key) = (select count(*) from product);
+(꼭 Join을 사용하지 않더라도 더 간단하게 풀 수 있음)
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q30. The Number of Employees Which Report to Each Employee */
+/*
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| employee_id | int      |
+| name        | varchar  |
+| reports_to  | int      |
+| age         | int      |
++-------------+----------+
+employee_id is the column with unique values for this table.
+This table contains information about the employees and the id of the manager they report to. Some employees do not report to anyone (reports_to is null). 
+ 
+
+For this problem, we will consider a manager an employee who has at least 1 other employee reporting to them.
+
+Write a solution to report the ids and the names of all managers, the number of employees who report directly to them, and the average age of the reports rounded to the nearest integer.
+
+Return the result table ordered by employee_id.
+*/
+
+A30.
+SELECT a.employee_id,
+       a.name,
+       count(a.employee_id) as reports_count,
+       round(avg(b.age), 0) as average_age
+    from Employees A
+    inner join Employees B
+    on A.employee_id = b.reports_to
+    group by a.employee_id
+    ORDER BY A.employee_id;
+(답은 맞는데 한가지 오류가 있다면, a.employee_id를 세고 있음. 직원의 수를 구해야 함.
+(부하가 최소 1명인 직원만 관리자로 본다는 조건은 inner join으로 충족하여 having 절을 줄 필요가 없음)
+
+SELECT a.employee_id,
+       a.name,
+       count(b.employee_id) as reports_count,
+       round(avg(b.age), 0) as average_age
+    from Employees A
+    inner join Employees B
+    on A.employee_id = b.reports_to
+    group by a.employee_id
+    ORDER BY A.employee_id;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q31. 
 
  
 
