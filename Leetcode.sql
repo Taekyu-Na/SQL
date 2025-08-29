@@ -1322,15 +1322,109 @@ SELECT employee_id,
        department_id
     from Employee
 where primary_flag = 'Y'
+or count(department_id) = 1
+group by employee_id;
+-> COUNT()는 WHERE 절에 나올 수 없음. GROUP BY 이후 수행됨
+-> group by 이후 SQL 엔진이 어떤 department_id 값을 가져와야 하는지 모름
+
+SELECT employee_id,
+       department_id
+    from Employee
+where primary_flag = 'Y'
 or employee_id IN (
     Select employee_id from employee
     group by employee_id
     having count(department_id) = 1
 );
 
-
-
+------------------------------------------------------------------------------------------------------------------------
+/* Q32. Triangle Judgement */
+/*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| x           | int  |
+| y           | int  |
+| z           | int  |
++-------------+------+
+In SQL, (x, y, z) is the primary key column for this table.
+Each row of this table contains the lengths of three line segments.
  
+
+Report for every three line segments whether they can form a triangle.
+
+Return the result table in any order.
+*/
+
+A32.
+**삼각형 부등식: 세 변 중 어떤 두 변의 합이 나머지 한 변보다 엄격히 커야 함
+SELECT x,
+       y,
+       z,
+       (case
+       when (x+y > z) and (x+z > y) and (y+z >x) then 'Yes'
+       else 'No' end
+       ) as triangle
+    from Triangle;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q33. Consecutive Numbers */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| num         | varchar |
++-------------+---------+
+In SQL, id is the primary key for this table.
+id is an autoincrement column starting from 1.
+ 
+
+Find all numbers that appear at least three times consecutively.
+
+Return the result table in any order.
+*/
+
+A33.
+**아예 못 풀었음**
+SELECT DISTINCT a.num AS ConsecutiveNums
+FROM Logs A, Logs B, Logs C
+where a.id = b.id - 1
+and b.id = c.id -1
+and a.num = b.num
+and b.num = c.num;
+(3개의 테이블을 조인해도 됨)
+
+SELECT distinct a.num as ConsecutiveNums
+from Logs A
+Inner join Logs B
+on A.id = b.id - 1
+inner join Logs C
+on b.id = c.id - 1
+WHERE a.num = b.num = c.num;
+-> 마지막 where 절에서 SQL은 다중 비교 연산을 한 번에 해석하지 못함
+
+SELECT distinct a.num as ConsecutiveNums
+from Logs A
+Inner join Logs B
+on A.id = b.id - 1
+inner join Logs C
+on b.id = c.id - 1
+WHERE a.num = b.num and b.num = c.num;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q34. Product Price at a Given Date */
+/*
+
+
+
+
+
+
+
+
+
+
 
 
 
