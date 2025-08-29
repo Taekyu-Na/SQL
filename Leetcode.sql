@@ -1152,6 +1152,13 @@ Find the largest single number. If there is no single number, report null.
 */
 
 A28.
+**오답**
+SELECT MAX(num) AS num
+FROM MyNumbers
+GROUP BY num
+HAVING COUNT(num) = 1;
+-> 실행 순서 상 max(num)이 group 안에서 돌기 때문에 여러행을 반환하는 쿼리가 됨
+
 SELECT (case when num = A.num THEN max(a.num) else null end) as num
 from
 (SELECT num
@@ -1276,8 +1283,62 @@ SELECT a.employee_id,
     ORDER BY A.employee_id;
 
 ------------------------------------------------------------------------------------------------------------------------
-/* Q31. 
+/* Q31. Primary Department for Each Employee */
+/*
++---------------+---------+
+| Column Name   |  Type   |
++---------------+---------+
+| employee_id   | int     |
+| department_id | int     |
+| primary_flag  | varchar |
++---------------+---------+
+(employee_id, department_id) is the primary key (combination of columns with unique values) for this table.
+employee_id is the id of the employee.
+department_id is the id of the department to which the employee belongs.
+primary_flag is an ENUM (category) of type ('Y', 'N'). If the flag is 'Y', the department is the primary department for the employee. If the flag is 'N', the department is not the primary.
+ 
+
+Employees can belong to multiple departments. When the employee joins other departments, they need to decide which department is their primary department. Note that when an employee belongs to only one department, their primary column is 'N'.
+
+Write a solution to report all the employees with their primary department. For employees who belong to one department, report their only department.
+
+Return the result table in any order.
+*/
+
+A31.
+**오답**
+SELECT employee_id,
+       (case
+       when count(distinct department_id) > 1 and primary_flag = 'Y' then department_id
+       when count(distinct department_id) = 1 then department_id
+       else null end) as department_id
+    from Employee
+group by employee_id;
+-> GROUP BY employee_id를 했기 때문에 employee_id 별로 1행만 나오는데, 이때 department_id와, primary_flag가 집계함수 없이 select/case 안에 들어있기 때문에,
+엔진이 어떤 department_id와 어떤 primary_flag를 써야 하는지 알 수 없음
+-> count(distinct department_id)는 집계값이고, primary_flag는 개별 row 값이기 때문에 같은 case 안에서 비교 불가
+
+SELECT employee_id,
+       department_id
+    from Employee
+where primary_flag = 'Y'
+or employee_id IN (
+    Select employee_id from employee
+    group by employee_id
+    having count(department_id) = 1
+);
+
+
 
  
+
+
+
+
+
+
+
+
+
 
 
