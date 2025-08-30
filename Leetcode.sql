@@ -1415,8 +1415,67 @@ WHERE a.num = b.num and b.num = c.num;
 ------------------------------------------------------------------------------------------------------------------------
 /* Q34. Product Price at a Given Date */
 /*
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| new_price     | int     |
+| change_date   | date    |
++---------------+---------+
+(product_id, change_date) is the primary key (combination of columns with unique values) of this table.
+Each row of this table indicates that the price of some product was changed to a new price at some date.
+Initially, all products have price 10.
 
+Write a solution to find the prices of all products on the date 2019-08-16.
 
+Return the result table in any order.
+
+The result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Products table:
++------------+-----------+-------------+
+| product_id | new_price | change_date |
++------------+-----------+-------------+
+| 1          | 20        | 2019-08-14  |
+| 2          | 50        | 2019-08-14  |
+| 1          | 30        | 2019-08-15  |
+| 1          | 35        | 2019-08-16  |
+| 2          | 65        | 2019-08-17  |
+| 3          | 20        | 2019-08-18  |
++------------+-----------+-------------+
+*/
+
+A34.
+**오답**
+SELECT product_id,
+       case when min(change_date) > '2019-08-16' then '10'
+       when change_date <= '2019-08-16' then ???
+       else null end as price
+from Products
+group by product_id;
+-> min(change_date) 애매한 사용법
+
+SELECT product_id,
+       10 as price
+    from Products
+group by product_id
+having min(change_date) > '2019-08-16'
+union
+SELECT product_id,
+       new_price as price
+    from Products
+where (product_id, change_date) in (select product_id, max(change_date)
+                                    from Products
+                                    where change_date <= '2019-08-16'
+                                    group by product_id);
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q35. 
 
 
 
