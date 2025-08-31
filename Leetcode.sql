@@ -1475,13 +1475,154 @@ where (product_id, change_date) in (select product_id, max(change_date)
                                     group by product_id);
 
 ------------------------------------------------------------------------------------------------------------------------
-/* Q35. 
+/* Q35. Last Person to Fit in the Bus */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| person_id   | int     |
+| person_name | varchar |
+| weight      | int     |
+| turn        | int     |
++-------------+---------+
+person_id column contains unique values.
+This table has the information about all people waiting for a bus.
+The person_id and turn columns will contain all numbers from 1 to n, where n is the number of rows in the table.
+turn determines the order of which the people will board the bus, where turn=1 denotes the first person to board and turn=n denotes the last person to board.
+weight is the weight of the person in kilograms.
+ 
 
+There is a queue of people waiting to board a bus. However, the bus has a weight limit of 1000 kilograms, so there may be some people who cannot board.
 
+Write a solution to find the person_name of the last person that can fit on the bus without exceeding the weight limit. The test cases are generated such that the first person does not exceed the weight limit.
 
+Note that only one person can board the bus at any given turn.
+*/
 
+A35.
+**아예 못품**
+SELECT 
+    a.person_name
+FROM Queue a JOIN Queue b ON a.turn >= b.turn
+GROUP BY a.turn
+HAVING SUM(b.weight) <= 1000
+ORDER BY SUM(b.weight) DESC
+limit 1;
+(JOIN ON에서 a.turn >= b.turn의 뜻은 턴이 오면 그 사람의 이전까지 쭉 조합을 만들어냄)
+(그 사이에서 weight 합계를 구해서 1000 이하로 가지고 옴)
 
+SELECT person_name
+from (SELECT person_name,
+             weight,
+             turn,
+             sum(weight) over (order by turn) as total_weight
+            from Queue) as Subquery
+        where total_weight <= 1000
+order by turn desc
+limit 1;
+(sum(weight) over (order by turn) 이 구문으로 weight 합계를 차례대로 구함)
+(누적 무게가 1000 이하인 라인으로 한정)
 
+'SELECT person_name,
+             weight,
+             turn,
+             sum(weight) over (order by turn) as total_weight
+            from Queue
+        where total_weight <= 1000;'
+가 에러나는 이유는 실행 순서에 따라 FROM > WHERE 이기 때문에 WHERE에서 total_weight를 찾을 수 없음
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q36. Count Salary Categories */
+/*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| account_id  | int  |
+| income      | int  |
++-------------+------+
+account_id is the primary key (column with unique values) for this table.
+Each row contains information about the monthly income for one bank account.
+ 
+
+Write a solution to calculate the number of bank accounts for each salary category. The salary categories are:
+
+"Low Salary": All the salaries strictly less than $20000.
+"Average Salary": All the salaries in the inclusive range [$20000, $50000].
+"High Salary": All the salaries strictly greater than $50000.
+The result table must contain all three categories. If there are no accounts in a category, return 0.
+
+Return the result table in any order.
+*/
+
+A36.
+**아예 못품**
+SELECT 'Low Salary' as category,
+       sum(case when income < 20000 then 1
+       else 0 end) as accounts_count
+    from Accounts
+UNION
+SELECT 'Average Salary' as category,
+       sum(case when income between 20000 and 50000 then 1
+       else 0 end) as accounts_count
+    from Accounts
+UNION
+SELECT 'High Salary' as category,
+       sum(case when income > 50000 then 1
+       else 0 end) as accounts_count
+    from Accounts;
+(각 SELECT는 1개의 행(SALARY 범위 개수)만 반환하도록 되어있음)
+(UNION은 중복 제거하기 때문에 UNION ALL 대비 성능상 불리할 수 있음. 그리고 의미상 UNION ALL도 맞음)
+
+SELECT 'Low Salary' as category,
+       sum(case when income < 20000 then 1
+       else 0 end) as accounts_count
+    from Accounts
+UNION ALL
+SELECT 'Average Salary' as category,
+       sum(case when income between 20000 and 50000 then 1
+       else 0 end) as accounts_count
+    from Accounts
+UNION ALL
+SELECT 'High Salary' as category,
+       sum(case when income > 50000 then 1
+       else 0 end) as accounts_count
+    from Accounts;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q37. Employees Whose Manager Left the Company */
+/*
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| employee_id | int      |
+| name        | varchar  |
+| manager_id  | int      |
+| salary      | int      |
++-------------+----------+
+In SQL, employee_id is the primary key for this table.
+This table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null). 
+ 
+
+Find the IDs of the employees whose salary is strictly less than $30000 and whose manager left the company. When a manager leaves the company, their information is deleted from the Employees table, but the reports still have their manager_id set to the manager that left.
+
+Return the result table ordered by employee_id.
+*/
+
+A37.
+**오답**
+SELECT employee_id
+       from (SELECT employee_id
+               from Employees
+              where salary < 30000 and manager_id is not null and (manager_id) not in (employee_id)) as Subquery
+order by employee_id;
+-> manager_id not in (employee_id)는 결국 manager_id != employee_id와 같아버림
+-> NOT IN은 서브쿼리에 NULL 값이 포함되면 결과가 비정상적일 수 있음
+
+SELECT employee_id
+from Employees
+where salary < 30000
+  and manager_id not in (select employee_id from Employees)
+order by employee_id;
 
 
 
