@@ -1624,8 +1624,53 @@ where salary < 30000
   and manager_id not in (select employee_id from Employees)
 order by employee_id;
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q38. Exchange Seats */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| student     | varchar |
++-------------+---------+
+id is the primary key (unique value) column for this table.
+Each row of this table indicates the name and the ID of a student.
+The ID sequence always starts from 1 and increments continuously.
+ 
 
+Write a solution to swap the seat id of every two consecutive students. If the number of students is odd, the id of the last student is not swapped.
 
+Return the result table ordered by id in ascending order.
+*/
+
+A38.
+**아예 못품**
+SELECT
+    CASE
+        WHEN
+            id = (select max(id) from Seat) and mod(id, 2) = 1
+            then id
+        WHEN
+            mod(id, 2) = 1
+            then id + 1
+        ELSE
+            id - 1
+        end as id, student
+    from Seat
+order by id;
+(첫번째 WHEN은 마지막이 홀수 일때 그대로 ID 가져오고, 두번째는 홀수일때 다음 번호, 나머지는 직전 번호 가져옴)
+'
+| id | student |
+| -- | ------- |
+| 1  | Abbot   |
+| 2  | Doris   |
+| 3  | Emerson |
+| 4  | Green   |
+| 5  | Jeames  | 여기서 1 Abbot이 2 Abbot이 되고, 2 Doris가 1 Doris가 되서 순서가 바뀌는 개념이 되는 것'
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q39. Movie Rating */
+/*
 
 
 
