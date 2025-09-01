@@ -21,3 +21,4 @@ WHERE는 그 이전에 실행되므로 COUNT() 값이 아직 없음
 
 /* 그 외 */
   'SQL은 다중 비교 연산을 한 번에 해석하지 못함. (A = B = C 등)'
+  'SELECT 'TEXT' as Column처럼 Literal 값을 필드값으로 반환할 수 있음' 
