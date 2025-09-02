@@ -1713,6 +1713,57 @@ Find the movie name with the highest average rating in February 2020. In case of
 */
 
 A39.
+**아예 못품**
+(
+    SELECT min(A.name) as results
+        from Users A
+        inner join 
+            (SELECT user_id
+            from MovieRating
+            group by user_id
+            having count(rating) = (SELECT max(rate_cnt) from
+                            (SELECT count(rating) as rate_cnt
+                            from MovieRating
+                            group by user_id) as Subquery_A)) B
+        on a.user_id = b.user_id
+)
+UNION ALL
+(
+    SELECT title as results
+    from MovieRating C
+    inner join Movies D
+    on c.movie_id = d.movie_id
+    where c.created_at between '2020-02-01' and '2020-02-29'
+    group by d.movie_id, title
+    order by avg(c.rating) desc, title asc
+    limit 1
+)
+(위 문단은 먼저 user_id별 rating 카운트를 가져오고 감싸서 max(rate_cnt)로 그 중 최대치를 가져옴)
+(그 다음 MovieRating에서 rating 카운트가 위 최대치와 같은 user_id를 구하고)
+(Users와 join하여 name이 알파벳 최소값min으로 1개만 가져옴)
+(아래 문단은 2020-02에 생성된 데이터 중 movie_id별로 rating 평균이 가장 높은 것 1개의 title을 한번에 구함)
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q40. Restaurant Growth */
+/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
