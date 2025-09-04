@@ -1768,11 +1768,40 @@ Return the result table ordered by visited_on in ascending order.
 */
 
 A40.
+**오답**
+SELECT distinct visited_on,
+        sum(amount) over (order by visited_on asc
+        range between interval 6 day preceding and current row) as amount,
+        round(sum(amount) over (order by visited_on asc
+        range between interval 6 day preceding and current row)/7, 2) as average_amount
+    from Customer A
+    group by visited_on
+    having count(visited_on) over (order by visited_on asc
+        range unbounded preceding) >= 7
+    order by visited_on asc;
+-> visited_on으로 group by 했으므로 select distinct 불필요
+-> range between 구문은 일부 DBMS에서 날짜 타입 컬럼에 직접 못 쓸 수 있음. rows beteween 6 preceding and current row를 쓰거나
+서브쿼리에서 날짜 조건을 직접 걸어야 함
+-> 이 지문에서 매출이 없는 날짜는 없으니 /7도 되긴 하지만, 여러 고객이 방문할 수 있으니까 sum(amount)를 날짜 단위로 집계한 뒤
+평균을 내야함
+-> having 안에서 window function 이용 불가
 
 
-
-
-
+SELECT visited_on,
+       amount,
+       average_amount
+    from
+        (SELECT distinct visited_on,
+                         sum(amount) over (order by visited_on
+                         range between interval 6 day preceding and current row) as amount,
+                         round((sum(amount) over (order by visited_on
+                         range between interval 6 day preceding and current row))/7, 2) as average_amount
+            from Customer) as Subquery
+    where visited_on >= (SELECT date_add(min(visited_on), interval 6 day)
+                            from Customer)
+(인라인 뷰에서 전체 데이터에 대한 누적 합계와 그 평균을 구함. 단, GROUP BY는 못하고 distinct로 가져와야 함
+왜냐하면 group by하면 각 날짜별로 한 줄만 남은 상태에서 sum을 구하게 되기 때문)
+(해당 전체 데이터 중에서 이평선 7일이 시작하는 데이터부터 가져와야 하므로 where 절을 줌)
 
 
 
