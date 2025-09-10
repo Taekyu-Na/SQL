@@ -1806,11 +1806,55 @@ SELECT visited_on,
 ------------------------------------------------------------------------------------------------------------------------
 /* Q41. Friend Requests 2: Who Has the Most Friends */
 /*
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| requester_id   | int     |
+| accepter_id    | int     |
+| accept_date    | date    |
++----------------+---------+
+(requester_id, accepter_id) is the primary key (combination of columns with unique values) for this table.
+This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.
+ 
 
+Write a solution to find the people who have the most friends and the most friends number.
 
+The test cases are generated so that only one person has the most friends.
+*/
 
+A41.
+SELECT id, sum(num) as num
+    from
+        (SELECT requester_id as id, count(requester_id) as num
+            from (
+                    SELECT requester_id, count(requester_id)
+                        from RequestAccepted
+                        group by requester_id, accepter_id
+                ) as Subquery
+            group by requester_id
+        UNION ALL
+        SELECT accepter_id, count(accepter_id)
+            from (
+                    SELECT accepter_id, count(accepter_id)
+                        from RequestAccepted
+                        group by requester_id, accepter_id
+                ) as Subquery
+            group by accepter_id) as Subquery
+    group by id
+    order by num desc
+    limit 1
+(풀긴 했으나 복잡한 중첩 그룹핑을 가지고 있어 불필요한 로직이 너무 많음)
 
-
+SELECT id, count(*) as num
+    from
+        (SELECT requester_id as id
+            from RequestAccepted
+        UNION ALL
+        SELECT accepter_id as id
+            from RequestAccepted) as Subquery
+    group by id
+    order by num desc
+    limit 1
 
 
 
