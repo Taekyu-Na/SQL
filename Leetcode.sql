@@ -1963,6 +1963,40 @@ SELECT b.name as Department,
 (서브쿼리: 부서가 같으면서 더 높은 급여 값의 개수를 세기)
 (상위 3 번째 distinct 급여인지 계산)
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q44. Fix Names in a Table */
+/*
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| user_id        | int     |
+| name           | varchar |
++----------------+---------+
+user_id is the primary key (column with unique values) for this table.
+This table contains the ID and the name of the user. The name consists of only lowercase and uppercase characters.
+ 
+
+Write a solution to fix the names so that only the first character is uppercase and the rest are lowercase.
+
+Return the result table ordered by user_id.
+*/
+
+A44.
+SELECT user_id,
+       concat(UPPER(substring(name, 1, 1)), lower(substring(name, 2))) as name
+    from Users
+    order by user_id
+
+
+
+
+
+
+
+
+
+
+
 
 
 
