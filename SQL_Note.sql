@@ -19,6 +19,12 @@ GROUP BY를 쓰면 SELECT 절에는 반드시 다음 둘 중 하나만 나올 �
 COUNT()는 GROUP BY 이후에 생기는 값인데
 WHERE는 그 이전에 실행되므로 COUNT() 값이 아직 없음
 
+/* 4. REGEXP \\b */
+    \b는 단어 경계로 사용됨
+    예를 들어, \bcat은 'cat'이나 'my cat'은 매칭하지만, 'educate'는 매칭되지 않음
+    cat\b는 'cat'이나 'cat food'은 매칭하지만, 'cater'는 매칭되지 않음
+    \를 두개 쓰는 이유는 슬래시 escape용
+    
 /* 그 외 */
   'SQL은 다중 비교 연산을 한 번에 해석하지 못함. (A = B = C 등)'
   'SELECT 'TEXT' as Column처럼 Literal 값을 필드값으로 반환할 수 있음' 
