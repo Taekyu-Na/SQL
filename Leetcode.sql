@@ -1987,14 +1987,39 @@ SELECT user_id,
     from Users
     order by user_id
 
+------------------------------------------------------------------------------------------------------------------------
+/* Patients With a Condition */
+/*
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| patient_id   | int     |
+| patient_name | varchar |
+| conditions   | varchar |
++--------------+---------+
+patient_id is the primary key (column with unique values) for this table.
+'conditions' contains 0 or more code separated by spaces. 
+This table contains information of the patients in the hospital.
+ 
 
+Write a solution to find the patient_id, patient_name, and conditions of the patients who have Type I Diabetes. Type I Diabetes always starts with DIAB1 prefix.
 
+Return the result table in any order.
 
+The result format is in the following example.
+*/
 
+A45.
+**오답**
+SELECT * from Patients
+    where REGEXP_LIKE(conditions, '.DIAB1+')
+    OR REGEXP_LIKE(conditions, '^DIAB1')
 
+SELECT * FROM Patients
+    where conditions like 'DIAB1%' or
+          conditions like '% DIAB1%'
 
-
-
+SELECT * FROM patients WHERE conditions REGEXP '\\bDIAB1'
 
 
 
