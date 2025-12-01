@@ -1988,7 +1988,7 @@ SELECT user_id,
     order by user_id
 
 ------------------------------------------------------------------------------------------------------------------------
-/* Patients With a Condition */
+/* Q45. Patients With a Condition */
 /*
 +--------------+---------+
 | Column Name  | Type    |
@@ -2019,7 +2019,123 @@ SELECT * FROM Patients
     where conditions like 'DIAB1%' or
           conditions like '% DIAB1%'
 
-SELECT * FROM patients WHERE conditions REGEXP '\\bDIAB1'
+(SELECT * FROM patients WHERE conditions REGEXP '\\bDIAB1')
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q46. Delete Duplicate Emails */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters.
+ 
+
+Write a solution to delete all duplicate emails, keeping only one unique email with the smallest id.
+
+For SQL users, please note that you are supposed to write a DELETE statement and not a SELECT one.
+
+For Pandas users, please note that you are supposed to modify Person in place.
+
+After running your script, the answer shown is the Person table. The driver will first compile and run your piece of code and then show the Person table. The final order of the Person table does not matter.
+
+The result format is in the following example.
+*/
+
+A46.
+**오답**
+DELETE FROM Person
+    where (id) not in (SELECT min(id) from Person)
+
+DELETE A
+    from Person A
+    inner join Person B
+    on a.email = b.email
+    and a.id > b.id
+;
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q47. Second Highest Salary */
+/*
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains information about the salary of an employee.
+ 
+
+Write a solution to find the second highest distinct salary from the Employee table. If there is no second highest salary, return null (return None in Pandas).
+
+The result format is in the following example.
+*/
+
+A47.
+**오답**
+SELECT (CASE WHEN sal_rank = 2 then salary else null end) as SecondHighestSalary
+from (SELECT id,
+             salary,
+             rank() over (order by salary desc) as sal_rank
+    from Employee) Subq1
+'null
+200
+null'로 나오게 됨
+
+SELECT max(salary) as SecondHighestSalary from Employee
+    where salary <> (SELECT max(salary) from Employee)
+
+SELECT (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+) AS SecondHighestSalary;
+(SELECT로 한번 더 감싸주는 이유는 행이 없는 경우 NULL 값을 반환하기 위함)
+(SELECT로 감싸주지 않으면 아무 행도 반환되지 않음)
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q48. Group Sold Products By The Date */
+/*
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| sell_date   | date    |
+| product     | varchar |
++-------------+---------+
+There is no primary key (column with unique values) for this table. It may contain duplicates.
+Each row of this table contains the product name and the date it was sold in a market.
+ 
+
+Write a solution to find for each date the number of different products sold and their names.
+
+The sold products names for each date should be sorted lexicographically.
+
+Return the result table ordered by sell_date.
+
+The result format is in the following example.
+*/
+
+A48.
+SELECT sell_date,
+       count(distinct product) as num_sold,
+       GROUP_CONCAT(distinct product order by product asc) as products
+    from Activities
+    group by sell_date
+    order by sell_date asc, product asc
+;
+
+
+
+
+
+
+
+
 
 
 
