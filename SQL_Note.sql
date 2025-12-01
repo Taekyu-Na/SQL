@@ -15,8 +15,9 @@ GROUP BY를 쓰면 SELECT 절에는 반드시 다음 둘 중 하나만 나올 �
 (엔진이 어느 값을 가져와야 하는지 모르기 때문)
     '2.2 GROUP_CONCAT'
 GROUP_CONCAT = 여러 행의 값을 콤마로 구분된 하나의 필드로 합치기
-    EX) GROUP_CONCAT(distinct product order by product asc) as products
+    EX) GROUP_CONCAT(distinct product order by product asc SEPARATOR ',') as products
 이처럼 distinct, order by 사용 가능
+SEPERATOR ','를 넣어서 구분자 사용 가능
 
 /* 3. COUNT() 관련 */
   '3.1 COUNT() 실행 위치'
