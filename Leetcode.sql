@@ -2204,18 +2204,14 @@ The result format is in the following example.
 */
 
 A50.
+SELECT * FROM Users
+ where REGEXP_LIKE(mail, '^[:alpha:][:alnum:}_.-]+@leetcode.com}')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT *
+FROM Users
+WHERE 
+REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9._-]*@leetcode\\.com$', 'c');
+  ^[A-Za-z] : 첫 글자는 반드시 영어 문자
+  [A-Za-z0-9._-]* : 그 뒤에는 영문, 숫자, _, ., -가 0회 이상
+  @leetcode\.com$ : 문자열의 끝에 정확히 @leetcode.com이 옴 (백슬래시로 . escape)
+  'c' : 대소문자 구분
