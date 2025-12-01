@@ -2128,6 +2128,82 @@ SELECT sell_date,
     group by sell_date
     order by sell_date asc
 
+------------------------------------------------------------------------------------------------------------------------
+/* Q49. List the Products Ordered in a Period */
+/*
+Table: Products
+
++------------------+---------+
+| Column Name      | Type    |
++------------------+---------+
+| product_id       | int     |
+| product_name     | varchar |
+| product_category | varchar |
++------------------+---------+
+product_id is the primary key (column with unique values) for this table.
+This table contains data about the company's products.
+ 
+
+Table: Orders
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| order_date    | date    |
+| unit          | int     |
++---------------+---------+
+This table may have duplicate rows.
+product_id is a foreign key (reference column) to the Products table.
+unit is the number of products ordered in order_date.
+ 
+
+Write a solution to get the names of products that have at least 100 units ordered in February 2020 and their amount.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+
+A49.
+SELECT a.product_name,
+       sum(b.unit) as unit
+    from Products a
+    join Orders b
+    on a.product_id = b.product_id
+        where b.order_date between '2020-02-01' and '2020-02-29'
+            group by a.product_id, a.product_name
+            having sum(b.unit) >= 100
+EXTRACT(YEAR_MONTH FROM b.order_date) 보다 between and 쓰는게 Leap year, 가독성 등 고려 시 더 명확
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q50. Find Users With Valid E-Mails */
+/*
+Table: Users
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| name          | varchar |
+| mail          | varchar |
++---------------+---------+
+user_id is the primary key (column with unique values) for this table.
+This table contains information of the users signed up in a website. Some e-mails are invalid.
+ 
+
+Write a solution to find the users who have valid emails.
+
+A valid e-mail has a prefix name and a domain where:
+
+The prefix name is a string that may contain letters (upper or lower case), digits, underscore '_', period '.', and/or dash '-'. The prefix name must start with a letter.
+The domain is '@leetcode.com'.
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+
+A50.
 
 
 
