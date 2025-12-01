@@ -2123,11 +2123,12 @@ The result format is in the following example.
 A48.
 SELECT sell_date,
        count(distinct product) as num_sold,
-       GROUP_CONCAT(distinct product order by product asc) as products
+       GROUP_CONCAT(distinct product order by product asc SEPARATOR ',') as products
     from Activities
     group by sell_date
-    order by sell_date asc, product asc
-;
+    order by sell_date asc
+
+
 
 
 
