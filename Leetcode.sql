@@ -1,3 +1,7 @@
+"
+ 52번
+
+"
 /* Q1. Recyclable and Low Fat Products */
 /*
 +-------------+---------+
@@ -2215,3 +2219,127 @@ REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9._-]*@leetcode\\.com$', 'c');
   [A-Za-z0-9._-]* : 그 뒤에는 영문, 숫자, _, ., -가 0회 이상
   @leetcode\.com$ : 문자열의 끝에 정확히 @leetcode.com이 옴 (백슬래시로 . escape)
   'c' : 대소문자 구분
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q51. Combine Two Tables */
+/*
+Table: Person
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| personId    | int     |
+| lastName    | varchar |
+| firstName   | varchar |
++-------------+---------+
+personId is the primary key (column with unique values) for this table.
+This table contains information about the ID of some persons and their first and last names.
+ 
+
+Table: Address
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| addressId   | int     |
+| personId    | int     |
+| city        | varchar |
+| state       | varchar |
++-------------+---------+
+addressId is the primary key (column with unique values) for this table.
+Each row of this table contains information about the city and state of one person with ID = PersonId.
+ 
+
+Write a solution to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+
+A51.
+SELECT A.firstName,
+       A.lastName,
+       B.city,
+       B.state
+    from Person A
+        left outer join Address B
+        on A.personId = B.personId
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q52. Nth Highest Salary */
+/*
+Table: Employee
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains information about the salary of an employee.
+ 
+
+Write a solution to find the nth highest distinct salary from the Employee table. If there are less than n distinct salaries, return null.
+
+The result format is in the following example.
+*/
+
+A52.
+**아예 못품**
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+SET N = N-1;
+  RETURN  (
+      SELECT DISTINCT salary
+      FROM Employee
+      ORDER BY salary DESC
+      LIMIT 1 OFFSET N
+  );
+END
+-> OFFSET은 0부터 시작함. 따라서 N을 0-based로 맞추고 시작
+
+------------------------------------------------------------------------------------------------------------------------
+/* Q53. Employees Earaning More Than Their Managers */
+/*
+Table: Employee
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| salary      | int     |
+| managerId   | int     |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the ID of an employee, their name, salary, and the ID of their manager.
+ 
+
+Write a solution to find the employees who earn more than their managers.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+
+A53.
+SELECT A.name AS Employee
+    FROM Employee A
+    INNER JOIN Employee B
+    ON A.managerId = B.id
+        WHERE A.salary > B.salary
+;
+
+
+
+
+
+
+
+
+
+
+
+
