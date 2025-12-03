@@ -19,11 +19,9 @@ recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this produc
 Write a solution to find the ids of products that are both low fat and recyclable.
 Return the result table in any order.
 */
-
 A1.
 select product_id from products
 where low_fats = 'Y' and recyclable = 'Y';
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q2. Find Customer Referee */
 /*
@@ -44,7 +42,6 @@ referred by any customer with id != 2.
 not referred by any customer.
 Return the result table in any order.
 */
-
 A2.
 **오답**
 SELECT name
@@ -55,7 +52,6 @@ where id <> '2' or referee_id is NULL;
 SELECT name
 from customer
 where referee_id <> '2' or referee_id is NULL;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q3. Big Countries */
 /*
@@ -80,7 +76,6 @@ Write a solution to find the name, population, and area of the big countries.
 
 Return the result table in any order.
 */
-
 A3.
 **오답**
 select name, population, area from world
@@ -94,7 +89,6 @@ select name, population, area from World
 where
 area >= 3000000 or
 population >= 25000000;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q4. Article Views */
 /*
@@ -115,7 +109,6 @@ Write a solution to find all the authors that viewed at least one of their own a
 
 Return the result table sorted by id in ascending order.
 */
-
 A4.
 **오답**
 select author_id from Views
@@ -130,7 +123,6 @@ group by author_id
 order by author_id;
 -> group by 대신 select distinct가 더 나은 듯
 -> order by 절에 alias로 id를 넣어도 가능
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q5. Invalid Tweets */
 /*
@@ -149,12 +141,10 @@ Write a solution to find the IDs of the invalid tweets. The tweet is invalid if 
 
 Return the result table in any order.
 */
-
 A5.
 SELECT tweet_id from Tweets
 where length(content) > 15;
 -> LENGTH() 는 Byte 수 기준으로 저장 공간 기준, CHAR_LENGTH() 는 글자 수 기준
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q6. Replace Employee ID With The Unique Identifier */
  /*
@@ -184,7 +174,6 @@ Write a solution to show the unique ID of each user, If a user does not have a u
 
 Return the result table in any order.
 */
-
 A6.
  **오답**
 SELECT unique_id from EmployeeUNI right outer join Employees
@@ -208,7 +197,6 @@ SELECT
  from Employees A
  left outer join EmployeeUNI B
  on A.id = B.id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q7. Product Sales Analysis 1 */
 /*
@@ -243,7 +231,6 @@ Write a solution to report the product_name, year, and price for each sale_id in
 
 Return the resulting table in any order.
 */
-
 A7.
  SELECT
 Product.product_name,
@@ -282,7 +269,6 @@ Write a solution to find the IDs of the users who visited without making any tra
 
 Return the result table sorted in any order.
 */
-
 A8.
 **오답**
  SELECT A.customer_id, count(*)
@@ -311,7 +297,6 @@ select A.customer_id, count(*) as count_no_trans
 from Visits A
 where A.visit_id not in (select visit_id from Transactions B where A.visit_id = B.visit_id)
 group by customer_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q9. Rising Temperature */
 /*
@@ -331,7 +316,6 @@ Write a solution to find all dates' id with higher temperatures compared to its 
 
 Return the result table in any order.
 */
-
 A9.
  **오답**
  SELECT id
@@ -367,7 +351,6 @@ cross join weather B
 where DATEDIFF(A.recorddate, b.recorddate) = 1
 and a.temperature > b.temperature;
 (DATEDIFF 구문도 사용 가능)
-
 ------------------------------------------------------------------------------------------------------------------------ 
 /* Q10. Average Time of Process per Machine */
 /*
@@ -398,7 +381,6 @@ The resulting table should have the machine_id along with the average time as pr
 
 Return the result table in any order.
 */
-
 A10.
  **오답**
 SELECT machine_id, S.timestamp
@@ -418,7 +400,6 @@ from
  group by A.machine_id
  -> 먼저 Start와 end의 timestamp를 가진 2개의 테이블을 정의하고, machine_id 키값으로 self join하며 그룹핑.
  그 다음 end에서 start timestamp를 뺀 값을 평균하여 소수점 3째자리까지 반올림한다.
-
  ------------------------------------------------------------------------------------------------------------------------ 
  /* Q11. Employee Bonus */
  /*
@@ -451,7 +432,6 @@ Write a solution to report the name and bonus amount of each employee with a bon
 
 Return the result table in any order.
  */
-
  A11.
  **오답**
  select A.name,
@@ -474,7 +454,6 @@ where B.bonus < 1000;
  left outer join Bonus B
  on A.empid = B.empid
 where B.bonus < 1000 or B.bonus is NULL;
-
  ------------------------------------------------------------------------------------------------------------------------ 
 /* Q12. Students and Examinations */
 /*
@@ -516,7 +495,6 @@ Write a solution to find the number of times each student attended each exam.
 
 Return the result table ordered by student_id and subject_name.
 */
-
 A12.
 SELECT A.student_id,
        A.student_name,
@@ -530,7 +508,6 @@ and B.subject_name = C.subject_name
 group by A.student_id, A.student_name, B.subject_name
 order by A.student_id, B.subject_name;
 -> 복습 필수
-
 ------------------------------------------------------------------------------------------------------------------------
  /* Q13. Managers with at Least 5 Direct Reports */
  /*
@@ -552,7 +529,6 @@ Write a solution to find managers with at least five direct reports.
 
 Return the result table in any order.
  */
-
  A13.
  **오답**
 select A.name, count(A.id) from Employee A
@@ -567,7 +543,6 @@ left outer join Employee B
 on A.id = B.managerid
 group by A.id
 having count(B.managerid) >= 5;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q14. Confirmation Rate */
 /*
@@ -590,7 +565,6 @@ Write a solution to find the confirmation rate of each user.
 
 Return the result table in any order.
 */
-
 A14.
 **오답**
 Select A.user_id,
@@ -620,7 +594,6 @@ select A.user_id,
     left outer join confirmations B
     on A.user_id = B.user_id
 group by A.user_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q15. Not Boring Moves */
 /*
@@ -641,7 +614,6 @@ Write a solution to report the movies with an odd-numbered ID and a description 
 
 Return the result table ordered by rating in descending order.
 */
-
 A15.
 SELECT * from Cinema
 where id % 2 = 1
@@ -654,7 +626,6 @@ and description not like 'boring'
 order by rating desc;
 (%, MOD 둘다 사용 가능)
 (이번 경우 NOT LIKE를 써도 됐지만, 경우에 따라 위험할 수 있으므로 <>나 !=를 쓰는게 좋음)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q16. Average Selling Price */
 /*
@@ -688,7 +659,6 @@ Write a solution to find the average selling price for each product. average_pri
 
 Return the result table in any order.
 */
-
 A16.
  **결과는 맞지만 로직이 틀림**
 Select A.product_id,
@@ -708,7 +678,6 @@ left outer join UnitsSold b
 on A.product_id = B.product_id
 and B.purchase_date between A.start_date and A.end_date
 group by A.product_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q17. Project Employees 1 */
 /*
@@ -740,7 +709,6 @@ Write an SQL query that reports the average experience years of all the employee
 
 Return the result table in any order.
 */
-
 A17.
 SELECT A.project_id,
        round(avg(B.experience_years), 2) as average_years
@@ -748,7 +716,6 @@ from Project A
 left outer join Employee B
 on A.employee_ID = B.employee_id
 group by A.project_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q18. Percentage of Users Attended a Contest */
 /*
@@ -778,7 +745,6 @@ Write a solution to find the percentage of the users registered in each contest 
 
 Return the result table ordered by percentage in descending order. In case of a tie, order it by contest_id in ascending order.
 */
-
 A18.
 SELECT contest_id,
        round(count(user_id)/(select count(user_id) from Users)*100, 2) as percentage
@@ -793,7 +759,6 @@ SELECT contest_id,
        from Register
        GROUP BY contest_id
        order by percentage desc, contest_id asc;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q19. Queries Quality and Percentage */
 /*
@@ -825,7 +790,6 @@ Both quality and poor_query_percentage should be rounded to 2 decimal places.
 
 Return the result table in any order.
 */
-
 A19.
 **오답**
  SELECT query_name,
@@ -844,7 +808,6 @@ SELECT query_name,
        else 0 end)*100.0/count(rating), 2) as poor_query_percentage
 from Queries
 group by query_name;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q20. Monthly Transactions 1 */
 /*
@@ -866,7 +829,6 @@ Write an SQL query to find for each month and country, the number of transaction
 
 Return the result table in any order.
 */
-
 A20.
 **오답**
 SELECT date_format(trans_date, '%Y-%m') as month,
@@ -898,7 +860,6 @@ SELECT date_format(trans_date, '%Y-%m') as month,
        sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
 from transactions
 group by country, month;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q21. Immediate Food Delivery 2 */
 /*
@@ -920,7 +881,6 @@ The first order of a customer is the order with the earliest order date that the
 
 Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
 */
-
 A21.
 **오답**
 SELECT (count(case when order_date = customer_pref_delivery_date then 1 else null end))*100.0/(count(delivery_id)) as immediate_percentage
@@ -937,7 +897,6 @@ from delivery
 group by customer_id);
 (고객별 첫 주문에 대한 조건을 위해 where 절에 중첩 서브쿼리 넣음)
 (count else null 보다 sum else 0이 더 가독성 좋음)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q22. Game Play Analysis */
 /*
@@ -957,7 +916,6 @@ Write a solution to report the fraction of players that logged in again on the d
 In other words, you need to determine the number of players who logged in on the day immediately following their initial login,
 and divide it by the number of total players.
 */
-
 A22.
 **오답**
 SELECT round(sum(case when datediff(A.event_date, B.event_date) = 1 then 1 else 0 end)/count(DISTINCT A.player_id), 2) as fraction
@@ -974,7 +932,6 @@ from Activity
 group by player_id)
 (어떤 플레이어가 first_date + 1에 여러 번 로그인했다면, COUNT(player_id)에서 그 플레이어가 여러 번 카운트될 수 있음.
 따라서 분자에도 DISTINCT 넣어주면 좋음. 단, 지문에서 player_id, event_date가 PK로 지정되었기 때문에 내 로직도 문제는 없음)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q23. Number of Unique Subjects Taught by Each Teacher */
 /*
@@ -993,7 +950,6 @@ Write a solution to calculate the number of unique subjects each teacher teaches
 
 Return the result table in any order.
 */
-
 A23.
 **오답**
 SELECT teacher_id,
@@ -1007,7 +963,6 @@ SELECT teacher_id,
        count(distinct subject_id) as cnt
     from Teacher
 group by teacher_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q24. User Activity for the Past 30 Days 1 */
 /*
@@ -1029,7 +984,6 @@ Write a solution to find the daily active user count for a period of 30 days end
 
 Return the result table in any order.
 */
-
 A24.
 SELECT activity_date as day,
        count(distinct user_id) as active_users
@@ -1038,7 +992,6 @@ where activity_date between '2019-06-28' and '2019-07-27'
 group by activity_date;
 (일자에는 따옴표 필요)
 (WHERE 절에 BETWEEN AND 도 가능하고 >,< 도 가능)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q25. Product Sales Analysis 3 */
 /*
@@ -1066,7 +1019,6 @@ Return all sales entries for that product in that year.
 Return a table with the following columns: product_id, first_year, quantity, and price.
 Return the result in any order.
 */
-
 A25.
 **오답**
 SELECT product_id,
@@ -1088,7 +1040,6 @@ where (product_id, year) in
 (select product_id, min(year)
 FROM Sales
 group by product_id);
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q26. Classes With at Least 5 Students */
 /*
@@ -1106,13 +1057,11 @@ Write a solution to find all the classes that have at least five students.
 
 Return the result table in any order.
 */
-
 A26.
 SELECT class
 from Courses
 group by class
 having count(student) >= 5;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q27. Find Followers Count */
 /*
@@ -1130,14 +1079,12 @@ Write a solution that will, for each user, return the number of followers.
 
 Return the result table ordered by user_id in ascending order.
 */
-
 A27.
 SELECT user_id,
        count(follower_id) as followers_count
     from Followers
 group by user_id
 order by user_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q28. Biggest Single Number */
 /*
@@ -1154,7 +1101,6 @@ A single number is a number that appeared only once in the MyNumbers table.
 
 Find the largest single number. If there is no single number, report null.
 */
-
 A28.
 **오답**
 SELECT MAX(num) AS num
@@ -1178,7 +1124,6 @@ from
     from MyNumbers
     group by num
     HAVING count(num) = 1) as A;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q29. Customers Who Bought All Products */
 /*
@@ -1207,7 +1152,6 @@ Write a solution to report the customer ids from the Customer table that bought 
 
 Return the result table in any order.
 */
-
 A29.
 **오답**
 select a.customer_id
@@ -1240,7 +1184,6 @@ select customer_id
 group by customer_id
 having count(distinct product_key) = (select count(*) from product);
 (꼭 Join을 사용하지 않더라도 더 간단하게 풀 수 있음)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q30. The Number of Employees Which Report to Each Employee */
 /*
@@ -1262,7 +1205,6 @@ Write a solution to report the ids and the names of all managers, the number of 
 
 Return the result table ordered by employee_id.
 */
-
 A30.
 SELECT a.employee_id,
        a.name,
@@ -1285,7 +1227,6 @@ SELECT a.employee_id,
     on A.employee_id = b.reports_to
     group by a.employee_id
     ORDER BY A.employee_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q31. Primary Department for Each Employee */
 /*
@@ -1308,7 +1249,6 @@ Write a solution to report all the employees with their primary department. For 
 
 Return the result table in any order.
 */
-
 A31.
 **오답**
 SELECT employee_id,
@@ -1338,9 +1278,7 @@ where primary_flag = 'Y'
 or employee_id IN (
     Select employee_id from employee
     group by employee_id
-    having count(department_id) = 1
-);
-
+    having count(department_id) = 1);
 ------------------------------------------------------------------------------------------------------------------------
 /* Q32. Triangle Judgement */
 /*
@@ -1359,7 +1297,6 @@ Report for every three line segments whether they can form a triangle.
 
 Return the result table in any order.
 */
-
 A32.
 **삼각형 부등식: 세 변 중 어떤 두 변의 합이 나머지 한 변보다 엄격히 커야 함
 SELECT x,
@@ -1370,7 +1307,6 @@ SELECT x,
        else 'No' end
        ) as triangle
     from Triangle;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q33. Consecutive Numbers */
 /*
@@ -1388,7 +1324,6 @@ Find all numbers that appear at least three times consecutively.
 
 Return the result table in any order.
 */
-
 A33.
 **아예 못 풀었음**
 SELECT DISTINCT a.num AS ConsecutiveNums
@@ -1415,7 +1350,6 @@ on A.id = b.id - 1
 inner join Logs C
 on b.id = c.id - 1
 WHERE a.num = b.num and b.num = c.num;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q34. Product Price at a Given Date */
 /*
@@ -1453,7 +1387,6 @@ Products table:
 | 3          | 20        | 2019-08-18  |
 +------------+-----------+-------------+
 */
-
 A34.
 **오답**
 SELECT product_id,
@@ -1477,7 +1410,6 @@ where (product_id, change_date) in (select product_id, max(change_date)
                                     from Products
                                     where change_date <= '2019-08-16'
                                     group by product_id);
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q35. Last Person to Fit in the Bus */
 /*
@@ -1502,7 +1434,6 @@ Write a solution to find the person_name of the last person that can fit on the 
 
 Note that only one person can board the bus at any given turn.
 */
-
 A35.
 **아예 못품**
 SELECT 
@@ -1534,7 +1465,6 @@ limit 1;
             from Queue
         where total_weight <= 1000;'
 가 에러나는 이유는 실행 순서에 따라 FROM > WHERE 이기 때문에 WHERE에서 total_weight를 찾을 수 없음
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q36. Count Salary Categories */
 /*
@@ -1557,7 +1487,6 @@ The result table must contain all three categories. If there are no accounts in 
 
 Return the result table in any order.
 */
-
 A36.
 **아예 못품**
 SELECT 'Low Salary' as category,
@@ -1591,7 +1520,6 @@ SELECT 'High Salary' as category,
        sum(case when income > 50000 then 1
        else 0 end) as accounts_count
     from Accounts;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q37. Employees Whose Manager Left the Company */
 /*
@@ -1611,7 +1539,6 @@ Find the IDs of the employees whose salary is strictly less than $30000 and whos
 
 Return the result table ordered by employee_id.
 */
-
 A37.
 **오답**
 SELECT employee_id
@@ -1627,7 +1554,6 @@ from Employees
 where salary < 30000
   and manager_id not in (select employee_id from Employees)
 order by employee_id;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q38. Exchange Seats */
 /*
@@ -1646,7 +1572,6 @@ Write a solution to swap the seat id of every two consecutive students. If the n
 
 Return the result table ordered by id in ascending order.
 */
-
 A38.
 **아예 못품**
 SELECT
@@ -1671,7 +1596,6 @@ order by id;
 | 3  | Emerson |
 | 4  | Green   |
 | 5  | Jeames  | 여기서 1 Abbot이 2 Abbot이 되고, 2 Doris가 1 Doris가 되서 순서가 바뀌는 개념이 되는 것'
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q39. Movie Rating */
 /*
@@ -1715,7 +1639,6 @@ Write a solution to:
 Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
 Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
 */
-
 A39.
 **아예 못품**
 (
@@ -1746,7 +1669,6 @@ UNION ALL
 (그 다음 MovieRating에서 rating 카운트가 위 최대치와 같은 user_id를 구하고)
 (Users와 join하여 name이 알파벳 최소값min으로 1개만 가져옴)
 (아래 문단은 2020-02에 생성된 데이터 중 movie_id별로 rating 평균이 가장 높은 것 1개의 title을 한번에 구함)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q40. Restaurant Growth */
 /*
@@ -1770,7 +1692,6 @@ Compute the moving average of how much the customer paid in a seven days window 
 
 Return the result table ordered by visited_on in ascending order.
 */
-
 A40.
 **오답**
 SELECT distinct visited_on,
@@ -1806,7 +1727,6 @@ SELECT visited_on,
 (인라인 뷰에서 전체 데이터에 대한 누적 합계와 그 평균을 구함. 단, GROUP BY는 못하고 distinct로 가져와야 함
 왜냐하면 group by하면 각 날짜별로 한 줄만 남은 상태에서 sum을 구하게 되기 때문)
 (해당 전체 데이터 중에서 이평선 7일이 시작하는 데이터부터 가져와야 하므로 where 절을 줌)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q41. Friend Requests 2: Who Has the Most Friends */
 /*
@@ -1825,7 +1745,6 @@ Write a solution to find the people who have the most friends and the most frien
 
 The test cases are generated so that only one person has the most friends.
 */
-
 A41.
 SELECT id, sum(num) as num
     from
@@ -1859,7 +1778,6 @@ SELECT id, count(*) as num
     group by id
     order by num desc
     limit 1
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q42. Investments in 2016 */
 /*
@@ -1886,7 +1804,6 @@ have the same tiv_2015 value as one or more other policyholders, and
 are not located in the same city as any other policyholder (i.e., the (lat, lon) attribute pairs must be unique).
 Round tiv_2016 to two decimal places.
 */
-
 A42.
 **오답**
 SELECT round(sum(tiv_2016), 2) as tiv_2016
@@ -1917,7 +1834,6 @@ SELECT round(sum(tiv_2016), 2) as tiv_2016
             FROM Insurance
             GROUP BY lat, lon
             having count(*) = 1);
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q43. Department Top Three Salaries */
 /*
@@ -1952,7 +1868,6 @@ Write a solution to find the employees who are high earners in each of the depar
 
 Return the result table in any order.
 */
-
 A43.
 **아예 못품**
 SELECT b.name as Department,
@@ -1966,7 +1881,6 @@ SELECT b.name as Department,
             where C.departmentid = a.departmentid and c.salary >= a.salary) <= 3
 (서브쿼리: 부서가 같으면서 더 높은 급여 값의 개수를 세기)
 (상위 3 번째 distinct 급여인지 계산)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q44. Fix Names in a Table */
 /*
@@ -1984,13 +1898,11 @@ Write a solution to fix the names so that only the first character is uppercase 
 
 Return the result table ordered by user_id.
 */
-
 A44.
 SELECT user_id,
        concat(UPPER(substring(name, 1, 1)), lower(substring(name, 2))) as name
     from Users
     order by user_id
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q45. Patients With a Condition */
 /*
@@ -2012,7 +1924,6 @@ Return the result table in any order.
 
 The result format is in the following example.
 */
-
 A45.
 **오답**
 SELECT * from Patients
@@ -2024,7 +1935,6 @@ SELECT * FROM Patients
           conditions like '% DIAB1%'
 
 (SELECT * FROM patients WHERE conditions REGEXP '\\bDIAB1')
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q46. Delete Duplicate Emails */
 /*
@@ -2048,7 +1958,6 @@ After running your script, the answer shown is the Person table. The driver will
 
 The result format is in the following example.
 */
-
 A46.
 **오답**
 DELETE FROM Person
@@ -2059,8 +1968,6 @@ DELETE A
     inner join Person B
     on a.email = b.email
     and a.id > b.id
-;
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q47. Second Highest Salary */
 /*
@@ -2078,7 +1985,6 @@ Write a solution to find the second highest distinct salary from the Employee ta
 
 The result format is in the following example.
 */
-
 A47.
 **오답**
 SELECT (CASE WHEN sal_rank = 2 then salary else null end) as SecondHighestSalary
@@ -2101,7 +2007,6 @@ SELECT (
 ) AS SecondHighestSalary;
 (SELECT로 한번 더 감싸주는 이유는 행이 없는 경우 NULL 값을 반환하기 위함)
 (SELECT로 감싸주지 않으면 아무 행도 반환되지 않음)
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q48. Group Sold Products By The Date */
 /*
@@ -2123,7 +2028,6 @@ Return the result table ordered by sell_date.
 
 The result format is in the following example.
 */
-
 A48.
 SELECT sell_date,
        count(distinct product) as num_sold,
@@ -2131,7 +2035,6 @@ SELECT sell_date,
     from Activities
     group by sell_date
     order by sell_date asc
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q49. List the Products Ordered in a Period */
 /*
@@ -2168,7 +2071,6 @@ Return the result table in any order.
 
 The result format is in the following example.
 */
-
 A49.
 SELECT a.product_name,
        sum(b.unit) as unit
@@ -2179,7 +2081,6 @@ SELECT a.product_name,
             group by a.product_id, a.product_name
             having sum(b.unit) >= 100
 EXTRACT(YEAR_MONTH FROM b.order_date) 보다 between and 쓰는게 Leap year, 가독성 등 고려 시 더 명확
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q50. Find Users With Valid E-Mails */
 /*
@@ -2206,7 +2107,6 @@ Return the result table in any order.
 
 The result format is in the following example.
 */
-
 A50.
 SELECT * FROM Users
  where REGEXP_LIKE(mail, '^[:alpha:][:alnum:}_.-]+@leetcode.com}')
@@ -2219,7 +2119,6 @@ REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9._-]*@leetcode\\.com$', 'c');
   [A-Za-z0-9._-]* : 그 뒤에는 영문, 숫자, _, ., -가 0회 이상
   @leetcode\.com$ : 문자열의 끝에 정확히 @leetcode.com이 옴 (백슬래시로 . escape)
   'c' : 대소문자 구분
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q51. Combine Two Tables */
 /*
@@ -2256,7 +2155,6 @@ Return the result table in any order.
 
 The result format is in the following example.
 */
-
 A51.
 SELECT A.firstName,
        A.lastName,
@@ -2265,7 +2163,6 @@ SELECT A.firstName,
     from Person A
         left outer join Address B
         on A.personId = B.personId
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q52. Nth Highest Salary */
 /*
@@ -2285,7 +2182,6 @@ Write a solution to find the nth highest distinct salary from the Employee table
 
 The result format is in the following example.
 */
-
 A52.
 **아예 못품**
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
@@ -2299,7 +2195,6 @@ SET N = N-1;
   );
 END
 -> OFFSET은 0부터 시작함. 따라서 N을 0-based로 맞추고 시작
-
 ------------------------------------------------------------------------------------------------------------------------
 /* Q53. Employees Earaning More Than Their Managers */
 /*
@@ -2323,20 +2218,120 @@ Return the result table in any order.
 
 The result format is in the following example.
 */
-
 A53.
 SELECT A.name AS Employee
     FROM Employee A
     INNER JOIN Employee B
     ON A.managerId = B.id
         WHERE A.salary > B.salary
-;
+------------------------------------------------------------------------------------------------------------------------
+/* Q54. Rank Scores */
+/*
+Table: Scores
 
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| score       | decimal |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains the score of a game. Score is a floating point value with two decimal places.
+ 
 
+Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:
 
+The scores should be ranked from the highest to the lowest.
+If there is a tie between two scores, both should have the same ranking.
+After a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no holes between ranks.
+Return the result table ordered by score in descending order.
 
+The result format is in the following example.
+*/
+A54.
+select score,
+       dense_rank() over (order by score desc) as 'rank'
+    from Scores
+        order by score desc
+및
 
+SELECT a.score,
+       (SELECT count(DISTINCT b.score)
+        from Scores b
+        where b.score >= a.score) as 'rank'
+    FROM Scores A
+        order by a.score desc
+------------------------------------------------------------------------------------------------------------------------
+/* Q55. Duplicate Emails
+Table: Person
 
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters.
+ 
+
+Write a solution to report all the duplicate emails. Note that it's guaranteed that the email field is not NULL.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+A55.
+select email as Email
+    from Person
+    group by email
+    having count(email) > 1
+------------------------------------------------------------------------------------------------------------------------
+/* Q56. Customers Who Never Order */
+/*
+Table: Customers
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the ID and name of a customer.
+ 
+
+Table: Orders
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| customerId  | int  |
++-------------+------+
+id is the primary key (column with unique values) for this table.
+customerId is a foreign key (reference columns) of the ID from the Customers table.
+Each row of this table indicates the ID of an order and the ID of the customer who ordered it.
+ 
+
+Write a solution to find all customers who never order anything.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+A56.
+SELECT A.name as Customers
+    from Customers A
+    left outer JOIN Orders B
+    on a.id = b.customerId
+    where b.customerId is null
+및
+SELECT name as Customers
+    from Customers
+    where id not in (SELECT customerId from Orders)
+------------------------------------------------------------------------------------------------------------------------
+/* Q57. 
 
 
 
