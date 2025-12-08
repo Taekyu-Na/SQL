@@ -2331,9 +2331,163 @@ SELECT name as Customers
     from Customers
     where id not in (SELECT customerId from Orders)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q57. 
+/* Q57. Department Highest Salary */
+/*
+Table: Employee
 
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| id           | int     |
+| name         | varchar |
+| salary       | int     |
+| departmentId | int     |
++--------------+---------+
+id is the primary key (column with unique values) for this table.
+departmentId is a foreign key (reference columns) of the ID from the Department table.
+Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
+ 
 
+Table: Department
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table. It is guaranteed that department name is not NULL.
+Each row of this table indicates the ID of a department and its name.
+ 
+
+Write a solution to find employees who have the highest salary in each of the departments.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+A57.
+SELECT Department,
+       Employee,
+       Salary
+    FROM (SELECT b.name as Department,
+                 a.name as Employee,
+                 a.salary as Salary,
+                 rank() over (partition by a.departmentId order by a.salary desc) as ranking
+            FROM Employee A
+            JOIN Department B
+            on a.departmentId = b.id) as Subq
+    WHERE ranking  = 1
+및
+SELECT d.name AS Department, 
+       e.name AS Employee, 
+       e.salary AS Salary
+FROM Employee e
+JOIN Department d ON e.departmentId = d.id
+WHERE e.salary = (
+    SELECT MAX(salary)
+    FROM Employee
+    WHERE departmentId = e.departmentId
+);
+------------------------------------------------------------------------------------------------------------------------
+/* Q58. Trips and Users */
+/*
+Table: Trips
+
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| id          | int      |
+| client_id   | int      |
+| driver_id   | int      |
+| city_id     | int      |
+| status      | enum     |
+| request_at  | varchar  |     
++-------------+----------+
+id is the primary key (column with unique values) for this table.
+The table holds all taxi trips. Each trip has a unique id, while client_id and driver_id are foreign keys to the users_id at the Users table.
+Status is an ENUM (category) type of ('completed', 'cancelled_by_driver', 'cancelled_by_client').
+
+Table: Users
+
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| users_id    | int      |
+| banned      | enum     |
+| role        | enum     |
++-------------+----------+
+users_id is the primary key (column with unique values) for this table.
+The table holds all users. Each user has a unique users_id, and role is an ENUM type of ('client', 'driver', 'partner').
+banned is an ENUM (category) type of ('Yes', 'No').
+
+The cancellation rate is computed by dividing the number of canceled (by client or driver) requests with unbanned users by the total number of requests with unbanned users on that day.
+
+Write a solution to find the cancellation rate of requests with unbanned users (both client and driver must not be banned) each day between "2013-10-01" and "2013-10-03" with at least one trip. Round Cancellation Rate to two decimal points.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+A58.
+SELECT a.request_at as 'Day',
+       round((sum(case
+               when a.status <> 'completed' then 1 else 0 end))/count(a.request_at), 2)
+               as 'Cancellation Rate'
+    FROM Trips A
+    JOIN Users B
+      ON A.client_id = B.users_id
+        WHERE B.banned = 'No'
+        AND a.request_at between '2013-10-01' and '2013-10-03'
+        AND (a.driver_id) IN (SELECT users_id FROM Users
+                            WHERE banned = 'No')
+            GROUP BY a.request_at
+실행 속도가 더 빠른 최적화된 방안은 아래
+SELECT a.request_at as 'Day',
+       round((sum(case
+               when a.status <> 'completed' then 1 else 0 end))/count(a.request_at), 2)
+               as 'Cancellation Rate'
+    FROM Trips A
+    JOIN Users B
+      ON A.client_id = B.users_id and B.banned = 'No'
+    JOIN Users C
+      ON A.driver_id = C.users_id and C.banned = 'No'
+            WHERE a.request_at between '2013-10-01' and '2013-10-03'
+                GROUP BY a.request_at
+'IN (subquery) 제거 → 실행 계획에서 중첩 Loop 감소
+두 Users 테이블을 JOIN함으로써 optimizer가 더 효율적으로 인덱스 사용 가능
+조건이 명확해지고 가독성이 올라감'
+------------------------------------------------------------------------------------------------------------------------
+/* Q59. Game Play Analysis 1 */
+/*
+Table: Activity
+
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| player_id    | int     |
+| device_id    | int     |
+| event_date   | date    |
+| games_played | int     |
++--------------+---------+
+(player_id, event_date) is the primary key (combination of columns with unique values) of this table.
+This table shows the activity of players of some games.
+Each row is a record of a player who logged in and played a number of games (possibly 0) before logging out on someday using some device.
+ 
+
+Write a solution to find the first login date for each player.
+
+Return the result table in any order.
+
+The result format is in the following example.
+*/
+A59.
+SELECT player_id,
+       min(event_date) as first_login
+    FROM Activity
+        group by player_id
+------------------------------------------------------------------------------------------------------------------------
+/* Q60.
 
 
 
