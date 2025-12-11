@@ -3,7 +3,6 @@
 
 "
 /* Q1. Recyclable and Low Fat Products */
-/*
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -15,7 +14,6 @@ product_id is the primary key (column with unique values) for this table.
 low_fats is an ENUM (category) of type ('Y', 'N') where 'Y' means this product is low fat and 'N' means it is not.
 recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this product is recyclable and 'N' means it is not.
  
-
 Write a solution to find the ids of products that are both low fat and recyclable.
 Return the result table in any order.
 */
@@ -23,8 +21,7 @@ A1.
 select product_id from products
 where low_fats = 'Y' and recyclable = 'Y';
 ------------------------------------------------------------------------------------------------------------------------
-/* Q2. Find Customer Referee */
-/*
+/* Q2. Find Customer Referee
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -35,7 +32,6 @@ where low_fats = 'Y' and recyclable = 'Y';
 In SQL, id is the primary key column for this table.
 Each row of this table indicates the id of a customer, their name, and the id of the customer who referred them.
  
-
 Find the names of the customer that are either:
 
 referred by any customer with id != 2.
@@ -53,8 +49,7 @@ SELECT name
 from customer
 where referee_id <> '2' or referee_id is NULL;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q3. Big Countries */
-/*
+/* Q3. Big Countries
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -66,7 +61,6 @@ where referee_id <> '2' or referee_id is NULL;
 +-------------+---------+
 name is the primary key (column with unique values) for this table.
 Each row of this table gives information about the name of a country, the continent to which it belongs, its area, the population, and its GDP value.
- 
 
 A country is big if:
 
@@ -90,8 +84,7 @@ where
 area >= 3000000 or
 population >= 25000000;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q4. Article Views */
-/*
+/* Q4. Article Views
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -103,7 +96,6 @@ population >= 25000000;
 There is no primary key (column with unique values) for this table, the table may have duplicate rows.
 Each row of this table indicates that some viewer viewed an article (written by some author) on some date. 
 Note that equal author_id and viewer_id indicate the same person.
- 
 
 Write a solution to find all the authors that viewed at least one of their own articles.
 
@@ -124,8 +116,7 @@ order by author_id;
 -> group by 대신 select distinct가 더 나은 듯
 -> order by 절에 alias로 id를 넣어도 가능
 ------------------------------------------------------------------------------------------------------------------------
-/* Q5. Invalid Tweets */
-/*
+/* Q5. Invalid Tweets
 +----------------+---------+
 | Column Name    | Type    |
 +----------------+---------+
@@ -136,7 +127,6 @@ tweet_id is the primary key (column with unique values) for this table.
 content consists of alphanumeric characters, '!', or ' ' and no other special characters.
 This table contains all the tweets in a social media app.
  
-
 Write a solution to find the IDs of the invalid tweets. The tweet is invalid if the number of characters used in the content of the tweet is strictly greater than 15.
 
 Return the result table in any order.
@@ -146,8 +136,7 @@ SELECT tweet_id from Tweets
 where length(content) > 15;
 -> LENGTH() 는 Byte 수 기준으로 저장 공간 기준, CHAR_LENGTH() 는 글자 수 기준
 ------------------------------------------------------------------------------------------------------------------------
-/* Q6. Replace Employee ID With The Unique Identifier */
- /*
+/* Q6. Replace Employee ID With The Unique Identifier
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -157,9 +146,7 @@ where length(content) > 15;
 id is the primary key (column with unique values) for this table.
 Each row of this table contains the id and the name of an employee in a company.
  
-
 Table: EmployeeUNI
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -169,7 +156,6 @@ Table: EmployeeUNI
 (id, unique_id) is the primary key (combination of columns with unique values) for this table.
 Each row of this table contains the id and the corresponding unique id of an employee in the company.
  
-
 Write a solution to show the unique ID of each user, If a user does not have a unique ID replace just show null.
 
 Return the result table in any order.
@@ -198,8 +184,7 @@ SELECT
  left outer join EmployeeUNI B
  on A.id = B.id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q7. Product Sales Analysis 1 */
-/*
+/* Q7. Product Sales Analysis 1
 +-------------+-------+
 | Column Name | Type  |
 +-------------+-------+
@@ -214,9 +199,7 @@ product_id is a foreign key (reference column) to Product table.
 Each row of this table shows a sale on the product product_id in a certain year.
 Note that the price is per unit.
  
-
 Table: Product
-
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -240,8 +223,7 @@ from Sales  inner join Product
 on Product.product_id = Sales.product_id;
 (ALIAS 사용하면 Runtime이 느려짐?)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q8. Customer Who Visited but Did Not Make Any Transactions */
-/*
+/* Q8. Customer Who Visited but Did Not Make Any Transactions
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -251,9 +233,7 @@ on Product.product_id = Sales.product_id;
 visit_id is the column with unique values for this table.
 This table contains information about the customers who visited the mall.
  
-
 Table: Transactions
-
 +----------------+---------+
 | Column Name    | Type    |
 +----------------+---------+
@@ -264,7 +244,6 @@ Table: Transactions
 transaction_id is column with unique values for this table.
 This table contains information about the transactions made during the visit_id.
  
-
 Write a solution to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
 
 Return the result table sorted in any order.
@@ -298,8 +277,7 @@ from Visits A
 where A.visit_id not in (select visit_id from Transactions B where A.visit_id = B.visit_id)
 group by customer_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q9. Rising Temperature */
-/*
+/* Q9. Rising Temperature
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -311,7 +289,6 @@ id is the column with unique values for this table.
 There are no different rows with the same recordDate.
 This table contains information about the temperature on a certain day.
  
-
 Write a solution to find all dates' id with higher temperatures compared to its previous dates (yesterday).
 
 Return the result table in any order.
@@ -352,8 +329,7 @@ where DATEDIFF(A.recorddate, b.recorddate) = 1
 and a.temperature > b.temperature;
 (DATEDIFF 구문도 사용 가능)
 ------------------------------------------------------------------------------------------------------------------------ 
-/* Q10. Average Time of Process per Machine */
-/*
+/* Q10. Average Time of Process per Machine
 +----------------+---------+
 | Column Name    | Type    |
 +----------------+---------+
@@ -372,7 +348,6 @@ timestamp is a float representing the current time in seconds.
 The 'start' timestamp will always be before the 'end' timestamp for every (machine_id, process_id) pair.
 It is guaranteed that each (machine_id, process_id) pair has a 'start' and 'end' timestamp.
  
-
 There is a factory website that has several machines each running the same number of processes. Write a solution to find the average time each machine takes to complete a process.
 
 The time to complete a process is the 'end' timestamp minus the 'start' timestamp. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run.
@@ -401,8 +376,7 @@ from
  -> 먼저 Start와 end의 timestamp를 가진 2개의 테이블을 정의하고, machine_id 키값으로 self join하며 그룹핑.
  그 다음 end에서 start timestamp를 뺀 값을 평균하여 소수점 3째자리까지 반올림한다.
  ------------------------------------------------------------------------------------------------------------------------ 
- /* Q11. Employee Bonus */
- /*
+ /* Q11. Employee Bonus
  +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -414,9 +388,7 @@ from
 empId is the column with unique values for this table.
 Each row of this table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
  
-
 Table: Bonus
-
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -427,7 +399,6 @@ empId is the column of unique values for this table.
 empId is a foreign key (reference column) to empId from the Employee table.
 Each row of this table contains the id of an employee and their respective bonus.
  
-
 Write a solution to report the name and bonus amount of each employee with a bonus less than 1000.
 
 Return the result table in any order.
@@ -455,8 +426,7 @@ where B.bonus < 1000;
  on A.empid = B.empid
 where B.bonus < 1000 or B.bonus is NULL;
  ------------------------------------------------------------------------------------------------------------------------ 
-/* Q12. Students and Examinations */
-/*
+/* Q12. Students and Examinations
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -466,9 +436,7 @@ where B.bonus < 1000 or B.bonus is NULL;
 student_id is the primary key (column with unique values) for this table.
 Each row of this table contains the ID and the name of one student in the school.
  
-
 Table: Subjects
-
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -477,9 +445,7 @@ Table: Subjects
 subject_name is the primary key (column with unique values) for this table.
 Each row of this table contains the name of one subject in the school.
  
-
 Table: Examinations
-
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -490,7 +456,6 @@ There is no primary key (column with unique values) for this table. It may conta
 Each student from the Students table takes every course from the Subjects table.
 Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
  
-
 Write a solution to find the number of times each student attended each exam.
 
 Return the result table ordered by student_id and subject_name.
@@ -509,8 +474,7 @@ group by A.student_id, A.student_name, B.subject_name
 order by A.student_id, B.subject_name;
 -> 복습 필수
 ------------------------------------------------------------------------------------------------------------------------
- /* Q13. Managers with at Least 5 Direct Reports */
- /*
+ /* Q13. Managers with at Least 5 Direct Reports
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -523,7 +487,6 @@ id is the primary key (column with unique values) for this table.
 Each row of this table indicates the name of an employee, their department, and the id of their manager.
 If managerId is null, then the employee does not have a manager.
 No employee will be the manager of themself.
- 
 
 Write a solution to find managers with at least five direct reports.
 
@@ -544,8 +507,7 @@ on A.id = B.managerid
 group by A.id
 having count(B.managerid) >= 5;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q14. Confirmation Rate */
-/*
+/* Q14. Confirmation Rate
 +----------------+----------+
 | Column Name    | Type     |
 +----------------+----------+
@@ -557,7 +519,6 @@ having count(B.managerid) >= 5;
 user_id is a foreign key (reference column) to the Signups table.
 action is an ENUM (category) of the type ('confirmed', 'timeout')
 Each row of this table indicates that the user with ID user_id requested a confirmation message at time_stamp and that confirmation message was either confirmed ('confirmed') or expired without confirming ('timeout').
- 
 
 The confirmation rate of a user is the number of 'confirmed' messages divided by the total number of requested confirmation messages. The confirmation rate of a user that did not request any confirmation messages is 0. Round the confirmation rate to two decimal places.
 
@@ -595,8 +556,7 @@ select A.user_id,
     on A.user_id = B.user_id
 group by A.user_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q15. Not Boring Moves */
-/*
+/* Q15. Not Boring Moves
 +----------------+----------+
 | Column Name    | Type     |
 +----------------+----------+
@@ -627,8 +587,7 @@ order by rating desc;
 (%, MOD 둘다 사용 가능)
 (이번 경우 NOT LIKE를 써도 됐지만, 경우에 따라 위험할 수 있으므로 <>나 !=를 쓰는게 좋음)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q16. Average Selling Price */
-/*
+/* Q16. Average Selling Price
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -641,7 +600,6 @@ order by rating desc;
 Each row of this table indicates the price of the product_id in the period from start_date to end_date.
 For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
  
-
 Table: UnitsSold
 
 +---------------+---------+
@@ -654,7 +612,6 @@ Table: UnitsSold
 This table may contain duplicate rows.
 Each row of this table indicates the date, units, and product_id of each product sold. 
  
-
 Write a solution to find the average selling price for each product. average_price should be rounded to 2 decimal places. If a product does not have any sold units, its average selling price is assumed to be 0.
 
 Return the result table in any order.
@@ -679,8 +636,7 @@ on A.product_id = B.product_id
 and B.purchase_date between A.start_date and A.end_date
 group by A.product_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q17. Project Employees 1 */
-/*
+/* Q17. Project Employees 1
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -691,7 +647,6 @@ group by A.product_id;
 employee_id is a foreign key to Employee table.
 Each row of this table indicates that the employee with employee_id is working on the project with project_id.
  
-
 Table: Employee
 
 +------------------+---------+
@@ -717,8 +672,7 @@ left outer join Employee B
 on A.employee_ID = B.employee_id
 group by A.project_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q18. Percentage of Users Attended a Contest */
-/*
+/* Q18. Percentage of Users Attended a Contest
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -728,7 +682,6 @@ group by A.project_id;
 user_id is the primary key (column with unique values) for this table.
 Each row of this table contains the name and the id of a user.
  
-
 Table: Register
 
 +-------------+---------+
@@ -760,8 +713,7 @@ SELECT contest_id,
        GROUP BY contest_id
        order by percentage desc, contest_id asc;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q19. Queries Quality and Percentage */
-/*
+/* Q19. Queries Quality and Percentage
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -809,8 +761,7 @@ SELECT query_name,
 from Queries
 group by query_name;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q20. Monthly Transactions 1 */
-/*
+/* Q20. Monthly Transactions 1
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -861,8 +812,7 @@ SELECT date_format(trans_date, '%Y-%m') as month,
 from transactions
 group by country, month;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q21. Immediate Food Delivery 2 */
-/*
+/* Q21. Immediate Food Delivery 2
 +-----------------------------+---------+
 | Column Name                 | Type    |
 +-----------------------------+---------+
@@ -898,8 +848,7 @@ group by customer_id);
 (고객별 첫 주문에 대한 조건을 위해 where 절에 중첩 서브쿼리 넣음)
 (count else null 보다 sum else 0이 더 가독성 좋음)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q22. Game Play Analysis */
-/*
+/* Q22. Game Play Analysis
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -933,8 +882,7 @@ group by player_id)
 (어떤 플레이어가 first_date + 1에 여러 번 로그인했다면, COUNT(player_id)에서 그 플레이어가 여러 번 카운트될 수 있음.
 따라서 분자에도 DISTINCT 넣어주면 좋음. 단, 지문에서 player_id, event_date가 PK로 지정되었기 때문에 내 로직도 문제는 없음)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q23. Number of Unique Subjects Taught by Each Teacher */
-/*
+/* Q23. Number of Unique Subjects Taught by Each Teacher
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -964,8 +912,7 @@ SELECT teacher_id,
     from Teacher
 group by teacher_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q24. User Activity for the Past 30 Days 1 */
-/*
+/* Q24. User Activity for the Past 30 Days 1
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -993,8 +940,7 @@ group by activity_date;
 (일자에는 따옴표 필요)
 (WHERE 절에 BETWEEN AND 도 가능하고 >,< 도 가능)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q25. Product Sales Analysis 3 */
-/*
+/* Q25. Product Sales Analysis 3
 +-------------+-------+
 | Column Name | Type  |
 +-------------+-------+
@@ -1041,8 +987,7 @@ where (product_id, year) in
 FROM Sales
 group by product_id);
 ------------------------------------------------------------------------------------------------------------------------
-/* Q26. Classes With at Least 5 Students */
-/*
+/* Q26. Classes With at Least 5 Students
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1063,8 +1008,7 @@ from Courses
 group by class
 having count(student) >= 5;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q27. Find Followers Count */
-/*
+/* Q27. Find Followers Count
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -1086,8 +1030,7 @@ SELECT user_id,
 group by user_id
 order by user_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q28. Biggest Single Number */
-/*
+/* Q28. Biggest Single Number
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -1125,8 +1068,7 @@ from
     group by num
     HAVING count(num) = 1) as A;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q29. Customers Who Bought All Products */
-/*
+/* Q29. Customers Who Bought All Products
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1137,7 +1079,6 @@ This table may contain duplicates rows.
 customer_id is not NULL.
 product_key is a foreign key (reference column) to Product table.
  
-
 Table: Product
 
 +-------------+---------+
@@ -1185,8 +1126,7 @@ group by customer_id
 having count(distinct product_key) = (select count(*) from product);
 (꼭 Join을 사용하지 않더라도 더 간단하게 풀 수 있음)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q30. The Number of Employees Which Report to Each Employee */
-/*
+/* Q30. The Number of Employees Which Report to Each Employee
 +-------------+----------+
 | Column Name | Type     |
 +-------------+----------+
@@ -1228,8 +1168,7 @@ SELECT a.employee_id,
     group by a.employee_id
     ORDER BY A.employee_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q31. Primary Department for Each Employee */
-/*
+/* Q31. Primary Department for Each Employee
 +---------------+---------+
 | Column Name   |  Type   |
 +---------------+---------+
@@ -1280,8 +1219,7 @@ or employee_id IN (
     group by employee_id
     having count(department_id) = 1);
 ------------------------------------------------------------------------------------------------------------------------
-/* Q32. Triangle Judgement */
-/*
+/* Q32. Triangle Judgement
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -1308,8 +1246,7 @@ SELECT x,
        ) as triangle
     from Triangle;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q33. Consecutive Numbers */
-/*
+/* Q33. Consecutive Numbers
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1351,8 +1288,7 @@ inner join Logs C
 on b.id = c.id - 1
 WHERE a.num = b.num and b.num = c.num;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q34. Product Price at a Given Date */
-/*
+/* Q34. Product Price at a Given Date
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1369,8 +1305,6 @@ Write a solution to find the prices of all products on the date 2019-08-16.
 Return the result table in any order.
 
 The result format is in the following example.
-
- 
 
 Example 1:
 
@@ -1411,8 +1345,7 @@ where (product_id, change_date) in (select product_id, max(change_date)
                                     where change_date <= '2019-08-16'
                                     group by product_id);
 ------------------------------------------------------------------------------------------------------------------------
-/* Q35. Last Person to Fit in the Bus */
-/*
+/* Q35. Last Person to Fit in the Bus
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1466,8 +1399,7 @@ limit 1;
         where total_weight <= 1000;'
 가 에러나는 이유는 실행 순서에 따라 FROM > WHERE 이기 때문에 WHERE에서 total_weight를 찾을 수 없음
 ------------------------------------------------------------------------------------------------------------------------
-/* Q36. Count Salary Categories */
-/*
+/* Q36. Count Salary Categories
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -1521,8 +1453,7 @@ SELECT 'High Salary' as category,
        else 0 end) as accounts_count
     from Accounts;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q37. Employees Whose Manager Left the Company */
-/*
+/* Q37. Employees Whose Manager Left the Company
 +-------------+----------+
 | Column Name | Type     |
 +-------------+----------+
@@ -1555,8 +1486,7 @@ where salary < 30000
   and manager_id not in (select employee_id from Employees)
 order by employee_id;
 ------------------------------------------------------------------------------------------------------------------------
-/* Q38. Exchange Seats */
-/*
+/* Q38. Exchange Seats
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1597,8 +1527,7 @@ order by id;
 | 4  | Green   |
 | 5  | Jeames  | 여기서 1 Abbot이 2 Abbot이 되고, 2 Doris가 1 Doris가 되서 순서가 바뀌는 개념이 되는 것'
 ------------------------------------------------------------------------------------------------------------------------
-/* Q39. Movie Rating */
-/*
+/* Q39. Movie Rating
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1670,8 +1599,7 @@ UNION ALL
 (Users와 join하여 name이 알파벳 최소값min으로 1개만 가져옴)
 (아래 문단은 2020-02에 생성된 데이터 중 movie_id별로 rating 평균이 가장 높은 것 1개의 title을 한번에 구함)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q40. Restaurant Growth */
-/*
+/* Q40. Restaurant Growth
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1728,8 +1656,7 @@ SELECT visited_on,
 왜냐하면 group by하면 각 날짜별로 한 줄만 남은 상태에서 sum을 구하게 되기 때문)
 (해당 전체 데이터 중에서 이평선 7일이 시작하는 데이터부터 가져와야 하므로 where 절을 줌)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q41. Friend Requests 2: Who Has the Most Friends */
-/*
+/* Q41. Friend Requests 2: Who Has the Most Friends
 +----------------+---------+
 | Column Name    | Type    |
 +----------------+---------+
@@ -1779,8 +1706,7 @@ SELECT id, count(*) as num
     order by num desc
     limit 1
 ------------------------------------------------------------------------------------------------------------------------
-/* Q42. Investments in 2016 */
-/*
+/* Q42. Investments in 2016
 +-------------+-------+
 | Column Name | Type  |
 +-------------+-------+
@@ -1835,8 +1761,7 @@ SELECT round(sum(tiv_2016), 2) as tiv_2016
             GROUP BY lat, lon
             having count(*) = 1);
 ------------------------------------------------------------------------------------------------------------------------
-/* Q43. Department Top Three Salaries */
-/*
+/* Q43. Department Top Three Salaries
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -1882,8 +1807,7 @@ SELECT b.name as Department,
 (서브쿼리: 부서가 같으면서 더 높은 급여 값의 개수를 세기)
 (상위 3 번째 distinct 급여인지 계산)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q44. Fix Names in a Table */
-/*
+/* Q44. Fix Names in a Table
 +----------------+---------+
 | Column Name    | Type    |
 +----------------+---------+
@@ -1904,8 +1828,7 @@ SELECT user_id,
     from Users
     order by user_id
 ------------------------------------------------------------------------------------------------------------------------
-/* Q45. Patients With a Condition */
-/*
+/* Q45. Patients With a Condition
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -1936,8 +1859,7 @@ SELECT * FROM Patients
 
 (SELECT * FROM patients WHERE conditions REGEXP '\\bDIAB1')
 ------------------------------------------------------------------------------------------------------------------------
-/* Q46. Delete Duplicate Emails */
-/*
+/* Q46. Delete Duplicate Emails
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1969,8 +1891,7 @@ DELETE A
     on a.email = b.email
     and a.id > b.id
 ------------------------------------------------------------------------------------------------------------------------
-/* Q47. Second Highest Salary */
-/*
+/* Q47. Second Highest Salary
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -2008,8 +1929,7 @@ SELECT (
 (SELECT로 한번 더 감싸주는 이유는 행이 없는 경우 NULL 값을 반환하기 위함)
 (SELECT로 감싸주지 않으면 아무 행도 반환되지 않음)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q48. Group Sold Products By The Date */
-/*
+/* Q48. Group Sold Products By The Date
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2036,8 +1956,7 @@ SELECT sell_date,
     group by sell_date
     order by sell_date asc
 ------------------------------------------------------------------------------------------------------------------------
-/* Q49. List the Products Ordered in a Period */
-/*
+/* Q49. List the Products Ordered in a Period
 Table: Products
 
 +------------------+---------+
@@ -2082,8 +2001,7 @@ SELECT a.product_name,
             having sum(b.unit) >= 100
 EXTRACT(YEAR_MONTH FROM b.order_date) 보다 between and 쓰는게 Leap year, 가독성 등 고려 시 더 명확
 ------------------------------------------------------------------------------------------------------------------------
-/* Q50. Find Users With Valid E-Mails */
-/*
+/* Q50. Find Users With Valid E-Mails
 Table: Users
 
 +---------------+---------+
@@ -2120,8 +2038,7 @@ REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9._-]*@leetcode\\.com$', 'c');
   @leetcode\.com$ : 문자열의 끝에 정확히 @leetcode.com이 옴 (백슬래시로 . escape)
   'c' : 대소문자 구분
 ------------------------------------------------------------------------------------------------------------------------
-/* Q51. Combine Two Tables */
-/*
+/* Q51. Combine Two Tables
 Table: Person
 
 +-------------+---------+
@@ -2164,8 +2081,7 @@ SELECT A.firstName,
         left outer join Address B
         on A.personId = B.personId
 ------------------------------------------------------------------------------------------------------------------------
-/* Q52. Nth Highest Salary */
-/*
+/* Q52. Nth Highest Salary
 Table: Employee
 
 +-------------+------+
@@ -2196,8 +2112,7 @@ SET N = N-1;
 END
 -> OFFSET은 0부터 시작함. 따라서 N을 0-based로 맞추고 시작
 ------------------------------------------------------------------------------------------------------------------------
-/* Q53. Employees Earaning More Than Their Managers */
-/*
+/* Q53. Employees Earaning More Than Their Managers
 Table: Employee
 
 +-------------+---------+
@@ -2225,8 +2140,7 @@ SELECT A.name AS Employee
     ON A.managerId = B.id
         WHERE A.salary > B.salary
 ------------------------------------------------------------------------------------------------------------------------
-/* Q54. Rank Scores */
-/*
+/* Q54. Rank Scores
 Table: Scores
 
 +-------------+---------+
@@ -2287,8 +2201,7 @@ select email as Email
     group by email
     having count(email) > 1
 ------------------------------------------------------------------------------------------------------------------------
-/* Q56. Customers Who Never Order */
-/*
+/* Q56. Customers Who Never Order
 Table: Customers
 
 +-------------+---------+
@@ -2331,8 +2244,7 @@ SELECT name as Customers
     from Customers
     where id not in (SELECT customerId from Orders)
 ------------------------------------------------------------------------------------------------------------------------
-/* Q57. Department Highest Salary */
-/*
+/* Q57. Department Highest Salary
 Table: Employee
 
 +--------------+---------+
@@ -2390,8 +2302,7 @@ WHERE e.salary = (
     WHERE departmentId = e.departmentId
 );
 ------------------------------------------------------------------------------------------------------------------------
-/* Q58. Trips and Users */
-/*
+/* Q58. Trips and Users
 Table: Trips
 
 +-------------+----------+
@@ -2458,8 +2369,7 @@ SELECT a.request_at as 'Day',
 두 Users 테이블을 JOIN함으로써 optimizer가 더 효율적으로 인덱스 사용 가능
 조건이 명확해지고 가독성이 올라감'
 ------------------------------------------------------------------------------------------------------------------------
-/* Q59. Game Play Analysis 1 */
-/*
+/* Q59. Game Play Analysis 1
 Table: Activity
 
 +--------------+---------+
@@ -2487,7 +2397,25 @@ SELECT player_id,
     FROM Activity
         group by player_id
 ------------------------------------------------------------------------------------------------------------------------
-/* Q60.
+/* Q60. Customer Placing the Largest Number of Order
+Table: Orders
+
++-----------------+----------+
+| Column Name     | Type     |
++-----------------+----------+
+| order_number    | int      |
+| customer_number | int      |
++-----------------+----------+
+order_number is the primary key (column with unique values) for this table.
+This table contains information about the order ID and the customer ID.
+ 
+
+Write a solution to find the customer_number for the customer who has placed the largest number of orders.
+
+The test cases are generated so that exactly one customer will have placed more orders than any other customer.
+
+The result format is in the following example.
+*/
 
 
 
