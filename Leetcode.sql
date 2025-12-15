@@ -1,5 +1,5 @@
 "
- 52번
+ 52번, 65번
 
 "
 /* Q1. Recyclable and Low Fat Products */
@@ -2529,15 +2529,80 @@ SELECT actor_id,
     GROUP BY actor_id, director_id
     HAVING count(*) >= 3
 ------------------------------------------------------------------------------------------------------------------------
-/* Q64.
+/* Q64. Human Traffic of Stadium
+Table: Stadium
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| visit_date    | date    |
+| people        | int     |
++---------------+---------+
+visit_date is the column with unique values for this table.
+Each row of this table contains the visit date and visit id to the stadium with the number of people during the visit.
+As the id increases, the date increases as well.
+ 
+Write a solution to display the records with three or more rows with consecutive id's, and the number of people is greater than or equal to 100 for each.
+Return the result table ordered by visit_date in ascending order.
+The result format is in the following example.
+*/
+A64.
+아예못품
+WITH A AS (
+    SELECT id,
+        visit_date,
+        people,
+        id - ROW_NUMBER() OVER (ORDER BY id) AS ROW_NUM
+        FROM Stadium
+        WHERE people >= 100
+)
+    SELECT id,
+           visit_date,
+           people
+        FROM A
+        WHERE ROW_NUM IN (SELECT ROW_NUM FROM A
+                            GROUP BY ROW_NUM
+                            HAVING COUNT(*) >= 3)
+            ORDER BY visit_date
+'CTE(Common Table Expressions) 처음 사용. 별도 테이블을 만들어 전처리하는 느낌)
+id - ROW_NUMBER가 핵심임. people >= 100으로 거른 상태에서 id를 기준으로 다시 row_number 채번
+이때 연속된 수는 값이 같을 것임
 
-
-
-
-
-
-
-
+id | row_number | id - row_number
+---+------------+----------------
+2  | 1          | 1
+3  | 2          | 1
+5  | 3          | 2
+6  | 4          | 2
+7  | 5          | 2
+8  | 6          | 2'
+------------------------------------------------------------------------------------------------------------------------
+/* Q65. Swap Sex of Employees
+Table: Salary
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| id          | int      |
+| name        | varchar  |
+| sex         | ENUM     |
+| salary      | int      |
++-------------+----------+
+id is the primary key (column with unique values) for this table.
+The sex column is ENUM (category) value of type ('m', 'f').
+The table contains information about an employee.
+ 
+Write a solution to swap all 'f' and 'm' values (i.e., change all 'f' values to 'm' and vice versa) with a single update statement and no intermediate temporary tables.
+Note that you must write a single update statement, do not write any select statement for this problem.
+The result format is in the following example.
+*/
+A65.
+'신규'
+UPDATE Salary
+    SET sex = CASE sex
+        WHEN 'm' THEN 'f'
+        ELSE 'm'
+        END
+'UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능)
 
 
 
