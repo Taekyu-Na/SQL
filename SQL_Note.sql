@@ -34,6 +34,9 @@ cat\b는 'cat'이나 'cat food'은 매칭하지만, 'cater'는 매칭되지 않�
 IN (subquery)	일치값이 있으면 TRUE. 없으면 UNKNOWN (FALSE 취급). 정상적으로 동작함
 NOT IN (subquery)	NULL이 하나라도 있으면 전체가 UNKNOWN으로 고정. 결과가 전부 FALSE 취급되어 아무 행도 반환되지 않음
 
+/* 6. UPDATE */
+UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능
+
 /* 그 외 */
   'SQL은 다중 비교 연산을 한 번에 해석하지 못함. (A = B = C 등)'
   'SELECT 'TEXT' as Column처럼 Literal 값을 필드값으로 반환할 수 있음' 
