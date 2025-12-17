@@ -34,7 +34,11 @@ cat\b는 'cat'이나 'cat food'은 매칭하지만, 'cater'는 매칭되지 않�
 IN (subquery)	일치값이 있으면 TRUE. 없으면 UNKNOWN (FALSE 취급). 정상적으로 동작함
 NOT IN (subquery)	NULL이 하나라도 있으면 전체가 UNKNOWN으로 고정. 결과가 전부 FALSE 취급되어 아무 행도 반환되지 않음
 
-/* 6. UPDATE */
+/* 6. EXISTS / NOT EXISTS (Subquery) */
+NOT EXISTS는 컬럼을 비교해서 필터링하는 것이 아니라,
+외부 쿼리의 각 행에 대해 “조건을 만족하는 관련 행이 존재하는지”를 TRUE/FALSE로 평가하여 필터링한다.
+    
+/* 7. UPDATE */
 UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능
 
 /* 그 외 */
