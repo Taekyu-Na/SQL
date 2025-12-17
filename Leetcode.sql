@@ -2602,10 +2602,71 @@ UPDATE Salary
         WHEN 'm' THEN 'f'
         ELSE 'm'
         END
-'UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능)
+'UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능)'
+------------------------------------------------------------------------------------------------------------------------
+/* Q66. Sales Analysis 3
+Table: Product
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| product_id   | int     |
+| product_name | varchar |
+| unit_price   | int     |
++--------------+---------+
+product_id is the primary key (column with unique values) of this table.
+Each row of this table indicates the name and the price of each product.
+Table: Sales
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| seller_id   | int     |
+| product_id  | int     |
+| buyer_id    | int     |
+| sale_date   | date    |
+| quantity    | int     |
+| price       | int     |
++-------------+---------+
+This table can have duplicate rows.
+product_id is a foreign key (reference column) to the Product table.
+Each row of this table contains some information about one sale.
+ 
+Write a solution to report the products that were only sold in the first quarter of 2019. That is, between 2019-01-01 and 2019-03-31 inclusive.
+Return the result table in any order.
+The result format is in the following example. */
+A66.
+SELECT DISTINCT A.product_id,
+                A.product_name
+    FROM Product A
+    INNER JOIN Sales B
+    ON A.product_id = B.product_id
+    WHERE A.product_id NOT IN (SELECT product_id FROM Sales
+                                    WHERE sale_date NOT BETWEEN '2019-01-01' AND '2019-03-31')
+'1분기 내 판매 조건이 명시적으로 보장되지 않고, INNER JOIN에 암묵적으로 의존
+논리적으로는 맞지만, 조건이 분리되어 있어 가독성과 안정성이 떨어짐.
+또한, 서브쿼리에서 NOT IN + NULL 문제 발생 가능
+Sales.product_id가 NULL을 포함할 가능성이 있다면 서븐쿼리가 결과를 전부 반환하지 않는 문제가 발생할 수 있음
+EXISTS/NOT EXISTS 사용하면 좋음
+아래처럼 개선 가능'
+SELECT DISTINCT A.product_id,
+                A.product_name
+    FROM Product A
+    INNER JOIN Sales B
+    ON A.product_id = B.product_id
+        WHERE B.sale_date BETWEEN '2019-01-01' AND '2019-03-31'
+        AND NOT EXISTS (SELECT 1
+                        FROM Sales C
+                            WHERE A.product_id = C.product_id
+                            AND C.sale_date NOT BETWEEN '2019-01-01' AND '2019-03-31')
+'NOT EXISTS는 컬럼을 비교해서 필터링하는 것이 아니라,
+외부 쿼리의 각 행에 대해 “조건을 만족하는 관련 행이 존재하는지”를 TRUE/FALSE로 평가하여 필터링한다.'
 
-
-
-
+SELECT A.product_id,
+       A.product_name
+    FROM Product A
+    INNER JOIN Sales B
+    ON A.product_id = B.product_id
+        GROUP BY A.product_id, A.product_name
+            HAVING min(B.sale_date) >= '2019-01-01'
+            AND max(B.sale_date) <= '2019-03-31'
 
 
