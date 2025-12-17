@@ -2659,7 +2659,6 @@ SELECT DISTINCT A.product_id,
                             AND C.sale_date NOT BETWEEN '2019-01-01' AND '2019-03-31')
 'NOT EXISTS는 컬럼을 비교해서 필터링하는 것이 아니라,
 외부 쿼리의 각 행에 대해 “조건을 만족하는 관련 행이 존재하는지”를 TRUE/FALSE로 평가하여 필터링한다.'
-
 SELECT A.product_id,
        A.product_name
     FROM Product A
@@ -2668,5 +2667,9 @@ SELECT A.product_id,
         GROUP BY A.product_id, A.product_name
             HAVING min(B.sale_date) >= '2019-01-01'
             AND max(B.sale_date) <= '2019-03-31'
+'정석 답
+HAVING min, max로 최소 날짜와 최대 날짜가 모두 2019년 1분기 안에 있는가?를 확인 가능'
+------------------------------------------------------------------------------------------------------------------------
+/* Q67. 
 
 
