@@ -2,7 +2,7 @@
  52번, 65번
 
 "
-/* Q1. Recyclable and Low Fat Products */
+/* Q1. Recyclable and Low Fat Products
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -15,8 +15,7 @@ low_fats is an ENUM (category) of type ('Y', 'N') where 'Y' means this product i
 recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this product is recyclable and 'N' means it is not.
  
 Write a solution to find the ids of products that are both low fat and recyclable.
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A1.
 select product_id from products
 where low_fats = 'Y' and recyclable = 'Y';
@@ -33,11 +32,9 @@ In SQL, id is the primary key column for this table.
 Each row of this table indicates the id of a customer, their name, and the id of the customer who referred them.
  
 Find the names of the customer that are either:
-
 referred by any customer with id != 2.
 not referred by any customer.
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A2.
 **오답**
 SELECT name
@@ -67,9 +64,7 @@ A country is big if:
 it has an area of at least three million (i.e., 3000000 km2), or
 it has a population of at least twenty-five million (i.e., 25000000).
 Write a solution to find the name, population, and area of the big countries.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A3.
 **오답**
 select name, population, area from world
@@ -98,9 +93,7 @@ Each row of this table indicates that some viewer viewed an article (written by 
 Note that equal author_id and viewer_id indicate the same person.
 
 Write a solution to find all the authors that viewed at least one of their own articles.
-
-Return the result table sorted by id in ascending order.
-*/
+Return the result table sorted by id in ascending order.*/
 A4.
 **오답**
 select author_id from Views
@@ -128,9 +121,7 @@ content consists of alphanumeric characters, '!', or ' ' and no other special ch
 This table contains all the tweets in a social media app.
  
 Write a solution to find the IDs of the invalid tweets. The tweet is invalid if the number of characters used in the content of the tweet is strictly greater than 15.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A5.
 SELECT tweet_id from Tweets
 where length(content) > 15;
@@ -157,9 +148,7 @@ Table: EmployeeUNI
 Each row of this table contains the id and the corresponding unique id of an employee in the company.
  
 Write a solution to show the unique ID of each user, If a user does not have a unique ID replace just show null.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A6.
  **오답**
 SELECT unique_id from EmployeeUNI right outer join Employees
@@ -209,11 +198,8 @@ Table: Product
 product_id is the primary key (column with unique values) of this table.
 Each row of this table indicates the product name of each product.
  
-
 Write a solution to report the product_name, year, and price for each sale_id in the Sales table.
-
-Return the resulting table in any order.
-*/
+Return the resulting table in any order.*/
 A7.
  SELECT
 Product.product_name,
@@ -245,9 +231,7 @@ transaction_id is column with unique values for this table.
 This table contains information about the transactions made during the visit_id.
  
 Write a solution to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
-
-Return the result table sorted in any order.
-*/
+Return the result table sorted in any order.*/
 A8.
 **오답**
  SELECT A.customer_id, count(*)
@@ -290,9 +274,7 @@ There are no different rows with the same recordDate.
 This table contains information about the temperature on a certain day.
  
 Write a solution to find all dates' id with higher temperatures compared to its previous dates (yesterday).
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A9.
  **오답**
  SELECT id
@@ -349,13 +331,9 @@ The 'start' timestamp will always be before the 'end' timestamp for every (machi
 It is guaranteed that each (machine_id, process_id) pair has a 'start' and 'end' timestamp.
  
 There is a factory website that has several machines each running the same number of processes. Write a solution to find the average time each machine takes to complete a process.
-
 The time to complete a process is the 'end' timestamp minus the 'start' timestamp. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run.
-
 The resulting table should have the machine_id along with the average time as processing_time, which should be rounded to 3 decimal places.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A10.
  **오답**
 SELECT machine_id, S.timestamp
@@ -400,9 +378,7 @@ empId is a foreign key (reference column) to empId from the Employee table.
 Each row of this table contains the id of an employee and their respective bonus.
  
 Write a solution to report the name and bonus amount of each employee with a bonus less than 1000.
-
-Return the result table in any order.
- */
+Return the result table in any order.*/
  A11.
  **오답**
  select A.name,
@@ -457,9 +433,7 @@ Each student from the Students table takes every course from the Subjects table.
 Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
  
 Write a solution to find the number of times each student attended each exam.
-
-Return the result table ordered by student_id and subject_name.
-*/
+Return the result table ordered by student_id and subject_name.*/
 A12.
 SELECT A.student_id,
        A.student_name,
@@ -489,9 +463,7 @@ If managerId is null, then the employee does not have a manager.
 No employee will be the manager of themself.
 
 Write a solution to find managers with at least five direct reports.
-
-Return the result table in any order.
- */
+Return the result table in any order.*/
  A13.
  **오답**
 select A.name, count(A.id) from Employee A
@@ -521,11 +493,8 @@ action is an ENUM (category) of the type ('confirmed', 'timeout')
 Each row of this table indicates that the user with ID user_id requested a confirmation message at time_stamp and that confirmation message was either confirmed ('confirmed') or expired without confirming ('timeout').
 
 The confirmation rate of a user is the number of 'confirmed' messages divided by the total number of requested confirmation messages. The confirmation rate of a user that did not request any confirmation messages is 0. Round the confirmation rate to two decimal places.
-
 Write a solution to find the confirmation rate of each user.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A14.
 **오답**
 Select A.user_id,
@@ -569,11 +538,8 @@ id is the primary key (column with unique values) for this table.
 Each row contains information about the name of a movie, its genre, and its rating.
 rating is a 2 decimal places float in the range [0, 10]
  
-
 Write a solution to report the movies with an odd-numbered ID and a description that is not "boring".
-
-Return the result table ordered by rating in descending order.
-*/
+Return the result table ordered by rating in descending order.*/
 A15.
 SELECT * from Cinema
 where id % 2 = 1
@@ -601,7 +567,6 @@ Each row of this table indicates the price of the product_id in the period from 
 For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
  
 Table: UnitsSold
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -613,9 +578,7 @@ This table may contain duplicate rows.
 Each row of this table indicates the date, units, and product_id of each product sold. 
  
 Write a solution to find the average selling price for each product. average_price should be rounded to 2 decimal places. If a product does not have any sold units, its average selling price is assumed to be 0.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A16.
  **결과는 맞지만 로직이 틀림**
 Select A.product_id,
@@ -648,7 +611,6 @@ employee_id is a foreign key to Employee table.
 Each row of this table indicates that the employee with employee_id is working on the project with project_id.
  
 Table: Employee
-
 +------------------+---------+
 | Column Name      | Type    |
 +------------------+---------+
@@ -659,11 +621,8 @@ Table: Employee
 employee_id is the primary key of this table. It's guaranteed that experience_years is not NULL.
 Each row of this table contains information about one employee.
  
-
 Write an SQL query that reports the average experience years of all the employees for each project, rounded to 2 digits.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A17.
 SELECT A.project_id,
        round(avg(B.experience_years), 2) as average_years
@@ -683,7 +642,6 @@ user_id is the primary key (column with unique values) for this table.
 Each row of this table contains the name and the id of a user.
  
 Table: Register
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -693,11 +651,8 @@ Table: Register
 (contest_id, user_id) is the primary key (combination of columns with unique values) for this table.
 Each row of this table contains the id of a user and the contest they registered into.
  
-
 Write a solution to find the percentage of the users registered in each contest rounded to two decimals.
-
-Return the result table ordered by percentage in descending order. In case of a tie, order it by contest_id in ascending order.
-*/
+Return the result table ordered by percentage in descending order. In case of a tie, order it by contest_id in ascending order.*/
 A18.
 SELECT contest_id,
        round(count(user_id)/(select count(user_id) from Users)*100, 2) as percentage
@@ -727,21 +682,13 @@ This table contains information collected from some queries on a database.
 The position column has a value from 1 to 500.
 The rating column has a value from 1 to 5. Query with rating less than 3 is a poor query.
  
-
 We define query quality as:
-
 The average of the ratio between query rating and its position.
-
 We also define poor query percentage as:
-
 The percentage of all queries with rating less than 3.
-
 Write a solution to find each query_name, the quality and poor_query_percentage.
-
 Both quality and poor_query_percentage should be rounded to 2 decimal places.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A19.
 **오답**
  SELECT query_name,
@@ -775,11 +722,8 @@ id is the primary key of this table.
 The table has information about incoming transactions.
 The state column is an enum of type ["approved", "declined"].
  
-
 Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A20.
 **오답**
 SELECT date_format(trans_date, '%Y-%m') as month,
@@ -824,13 +768,9 @@ group by country, month;
 delivery_id is the column of unique values of this table.
 The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
  
-
 If the customer's preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
-
 The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
-
-Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
-*/
+Write a solution to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.*/
 A21.
 **오답**
 SELECT (count(case when order_date = customer_pref_delivery_date then 1 else null end))*100.0/(count(delivery_id)) as immediate_percentage
@@ -863,8 +803,7 @@ Each row is a record of a player who logged in and played a number of games (pos
 
 Write a solution to report the fraction of players that logged in again on the day after the day they first logged in, rounded to 2 decimal places.
 In other words, you need to determine the number of players who logged in on the day immediately following their initial login,
-and divide it by the number of total players.
-*/
+and divide it by the number of total players.*/
 A22.
 **오답**
 SELECT round(sum(case when datediff(A.event_date, B.event_date) = 1 then 1 else 0 end)/count(DISTINCT A.player_id), 2) as fraction
@@ -893,11 +832,8 @@ group by player_id)
 (subject_id, dept_id) is the primary key (combinations of columns with unique values) of this table.
 Each row in this table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
  
-
 Write a solution to calculate the number of unique subjects each teacher teaches in the university.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A23.
 **오답**
 SELECT teacher_id,
@@ -926,11 +862,8 @@ The activity_type column is an ENUM (category) of type ('open_session', 'end_ses
 The table shows the user activities for a social media website. 
 Note that each session belongs to exactly one user.
  
-
 Write a solution to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least one activity on that day.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A24.
 SELECT activity_date as day,
        count(distinct user_id) as active_users
@@ -957,14 +890,10 @@ A product may have multiple sales entries in the same year.
 Note that the per-unit price.
 
 Write a solution to find all sales that occurred in the first year each product was sold.
-
 For each product_id, identify the earliest year it appears in the Sales table.
-
 Return all sales entries for that product in that year.
-
 Return a table with the following columns: product_id, first_year, quantity, and price.
-Return the result in any order.
-*/
+Return the result in any order.*/
 A25.
 **오답**
 SELECT product_id,
@@ -997,11 +926,8 @@ group by product_id);
 (student, class) is the primary key (combination of columns with unique values) for this table.
 Each row of this table indicates the name of a student and the class in which they are enrolled.
  
-
 Write a solution to find all the classes that have at least five students.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A26.
 SELECT class
 from Courses
@@ -1018,11 +944,8 @@ having count(student) >= 5;
 (user_id, follower_id) is the primary key (combination of columns with unique values) for this table.
 This table contains the IDs of a user and a follower in a social media app where the follower follows the user.
  
-
 Write a solution that will, for each user, return the number of followers.
-
-Return the result table ordered by user_id in ascending order.
-*/
+Return the result table ordered by user_id in ascending order.*/
 A27.
 SELECT user_id,
        count(follower_id) as followers_count
@@ -1039,11 +962,8 @@ order by user_id;
 This table may contain duplicates (In other words, there is no primary key for this table in SQL).
 Each row of this table contains an integer.
  
-
 A single number is a number that appeared only once in the MyNumbers table.
-
-Find the largest single number. If there is no single number, report null.
-*/
+Find the largest single number. If there is no single number, report null.*/
 A28.
 **오답**
 SELECT MAX(num) AS num
@@ -1080,7 +1000,6 @@ customer_id is not NULL.
 product_key is a foreign key (reference column) to Product table.
  
 Table: Product
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1088,11 +1007,8 @@ Table: Product
 +-------------+---------+
 product_key is the primary key (column with unique values) for this table.
  
-
 Write a solution to report the customer ids from the Customer table that bought all the products in the Product table.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A29.
 **오답**
 select a.customer_id
@@ -1137,14 +1053,10 @@ having count(distinct product_key) = (select count(*) from product);
 +-------------+----------+
 employee_id is the column with unique values for this table.
 This table contains information about the employees and the id of the manager they report to. Some employees do not report to anyone (reports_to is null). 
- 
 
 For this problem, we will consider a manager an employee who has at least 1 other employee reporting to them.
-
 Write a solution to report the ids and the names of all managers, the number of employees who report directly to them, and the average age of the reports rounded to the nearest integer.
-
-Return the result table ordered by employee_id.
-*/
+Return the result table ordered by employee_id.*/
 A30.
 SELECT a.employee_id,
        a.name,
@@ -1181,13 +1093,9 @@ employee_id is the id of the employee.
 department_id is the id of the department to which the employee belongs.
 primary_flag is an ENUM (category) of type ('Y', 'N'). If the flag is 'Y', the department is the primary department for the employee. If the flag is 'N', the department is not the primary.
  
-
 Employees can belong to multiple departments. When the employee joins other departments, they need to decide which department is their primary department. Note that when an employee belongs to only one department, their primary column is 'N'.
-
 Write a solution to report all the employees with their primary department. For employees who belong to one department, report their only department.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A31.
 **오답**
 SELECT employee_id,
@@ -1230,11 +1138,8 @@ or employee_id IN (
 In SQL, (x, y, z) is the primary key column for this table.
 Each row of this table contains the lengths of three line segments.
  
-
 Report for every three line segments whether they can form a triangle.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A32.
 **삼각형 부등식: 세 변 중 어떤 두 변의 합이 나머지 한 변보다 엄격히 커야 함
 SELECT x,
@@ -1256,11 +1161,8 @@ SELECT x,
 In SQL, id is the primary key for this table.
 id is an autoincrement column starting from 1.
  
-
 Find all numbers that appear at least three times consecutively.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A33.
 **아예 못 풀었음**
 SELECT DISTINCT a.num AS ConsecutiveNums
@@ -1301,26 +1203,8 @@ Each row of this table indicates that the price of some product was changed to a
 Initially, all products have price 10.
 
 Write a solution to find the prices of all products on the date 2019-08-16.
-
 Return the result table in any order.
-
-The result format is in the following example.
-
-Example 1:
-
-Input: 
-Products table:
-+------------+-----------+-------------+
-| product_id | new_price | change_date |
-+------------+-----------+-------------+
-| 1          | 20        | 2019-08-14  |
-| 2          | 50        | 2019-08-14  |
-| 1          | 30        | 2019-08-15  |
-| 1          | 35        | 2019-08-16  |
-| 2          | 65        | 2019-08-17  |
-| 3          | 20        | 2019-08-18  |
-+------------+-----------+-------------+
-*/
+The result format is in the following example.*/
 A34.
 **오답**
 SELECT product_id,
@@ -1360,13 +1244,9 @@ The person_id and turn columns will contain all numbers from 1 to n, where n is 
 turn determines the order of which the people will board the bus, where turn=1 denotes the first person to board and turn=n denotes the last person to board.
 weight is the weight of the person in kilograms.
  
-
 There is a queue of people waiting to board a bus. However, the bus has a weight limit of 1000 kilograms, so there may be some people who cannot board.
-
 Write a solution to find the person_name of the last person that can fit on the bus without exceeding the weight limit. The test cases are generated such that the first person does not exceed the weight limit.
-
-Note that only one person can board the bus at any given turn.
-*/
+Note that only one person can board the bus at any given turn.*/
 A35.
 **아예 못품**
 SELECT 
@@ -1408,17 +1288,13 @@ limit 1;
 +-------------+------+
 account_id is the primary key (column with unique values) for this table.
 Each row contains information about the monthly income for one bank account.
- 
 
 Write a solution to calculate the number of bank accounts for each salary category. The salary categories are:
-
 "Low Salary": All the salaries strictly less than $20000.
 "Average Salary": All the salaries in the inclusive range [$20000, $50000].
 "High Salary": All the salaries strictly greater than $50000.
 The result table must contain all three categories. If there are no accounts in a category, return 0.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A36.
 **아예 못품**
 SELECT 'Low Salary' as category,
@@ -1464,12 +1340,9 @@ SELECT 'High Salary' as category,
 +-------------+----------+
 In SQL, employee_id is the primary key for this table.
 This table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null). 
- 
 
 Find the IDs of the employees whose salary is strictly less than $30000 and whose manager left the company. When a manager leaves the company, their information is deleted from the Employees table, but the reports still have their manager_id set to the manager that left.
-
-Return the result table ordered by employee_id.
-*/
+Return the result table ordered by employee_id.*/
 A37.
 **오답**
 SELECT employee_id
@@ -1497,11 +1370,8 @@ id is the primary key (unique value) column for this table.
 Each row of this table indicates the name and the ID of a student.
 The ID sequence always starts from 1 and increments continuously.
  
-
 Write a solution to swap the seat id of every two consecutive students. If the number of students is odd, the id of the last student is not swapped.
-
-Return the result table ordered by id in ascending order.
-*/
+Return the result table ordered by id in ascending order.*/
 A38.
 **아예 못품**
 SELECT
@@ -1536,10 +1406,8 @@ order by id;
 +---------------+---------+
 movie_id is the primary key (column with unique values) for this table.
 title is the name of the movie.
- 
 
 Table: Users
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1548,8 +1416,8 @@ Table: Users
 +---------------+---------+
 user_id is the primary key (column with unique values) for this table.
 The column 'name' has unique values.
+ 
 Table: MovieRating
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1562,12 +1430,9 @@ Table: MovieRating
 This table contains the rating of a movie by a user in their review.
 created_at is the user's review date. 
  
-
 Write a solution to:
-
 Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
-Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
-*/
+Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.*/
 A39.
 **아예 못품**
 (
@@ -1613,13 +1478,9 @@ This table contains data about customer transactions in a restaurant.
 visited_on is the date on which the customer with ID (customer_id) has visited the restaurant.
 amount is the total paid by a customer.
  
-
 You are the restaurant owner and you want to analyze a possible expansion (there will be at least one customer every day).
-
 Compute the moving average of how much the customer paid in a seven days window (i.e., current day + 6 days before). average_amount should be rounded to two decimal places.
-
-Return the result table ordered by visited_on in ascending order.
-*/
+Return the result table ordered by visited_on in ascending order.*/
 A40.
 **오답**
 SELECT distinct visited_on,
@@ -1638,7 +1499,6 @@ SELECT distinct visited_on,
 -> 이 지문에서 매출이 없는 날짜는 없으니 /7도 되긴 하지만, 여러 고객이 방문할 수 있으니까 sum(amount)를 날짜 단위로 집계한 뒤
 평균을 내야함
 -> having 안에서 window function 이용 불가
-
 
 SELECT visited_on,
        amount,
@@ -1667,11 +1527,8 @@ SELECT visited_on,
 (requester_id, accepter_id) is the primary key (combination of columns with unique values) for this table.
 This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.
  
-
 Write a solution to find the people who have the most friends and the most friends number.
-
-The test cases are generated so that only one person has the most friends.
-*/
+The test cases are generated so that only one person has the most friends.*/
 A41.
 SELECT id, sum(num) as num
     from
@@ -1723,13 +1580,10 @@ tiv_2015 is the total investment value in 2015 and tiv_2016 is the total investm
 lat is the latitude of the policy holder's city. It's guaranteed that lat is not NULL.
 lon is the longitude of the policy holder's city. It's guaranteed that lon is not NULL.
  
-
 Write a solution to report the sum of all total investment values in 2016 tiv_2016, for all policyholders who:
-
 have the same tiv_2015 value as one or more other policyholders, and
 are not located in the same city as any other policyholder (i.e., the (lat, lon) attribute pairs must be unique).
-Round tiv_2016 to two decimal places.
-*/
+Round tiv_2016 to two decimal places.*/
 A42.
 **오답**
 SELECT round(sum(tiv_2016), 2) as tiv_2016
@@ -1774,9 +1628,7 @@ id is the primary key (column with unique values) for this table.
 departmentId is a foreign key (reference column) of the ID from the Department table.
 Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
  
-
 Table: Department
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -1786,13 +1638,9 @@ Table: Department
 id is the primary key (column with unique values) for this table.
 Each row of this table indicates the ID of a department and its name.
  
-
 A company's executives are interested in seeing who earns the most money in each of the company's departments. A high earner in a department is an employee who has a salary in the top three unique salaries for that department.
-
 Write a solution to find the employees who are high earners in each of the departments.
-
-Return the result table in any order.
-*/
+Return the result table in any order.*/
 A43.
 **아예 못품**
 SELECT b.name as Department,
@@ -1817,11 +1665,8 @@ SELECT b.name as Department,
 user_id is the primary key (column with unique values) for this table.
 This table contains the ID and the name of the user. The name consists of only lowercase and uppercase characters.
  
-
 Write a solution to fix the names so that only the first character is uppercase and the rest are lowercase.
-
-Return the result table ordered by user_id.
-*/
+Return the result table ordered by user_id.*/
 A44.
 SELECT user_id,
        concat(UPPER(substring(name, 1, 1)), lower(substring(name, 2))) as name
@@ -1840,13 +1685,9 @@ patient_id is the primary key (column with unique values) for this table.
 'conditions' contains 0 or more code separated by spaces. 
 This table contains information of the patients in the hospital.
  
-
 Write a solution to find the patient_id, patient_name, and conditions of the patients who have Type I Diabetes. Type I Diabetes always starts with DIAB1 prefix.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A45.
 **오답**
 SELECT * from Patients
@@ -1869,17 +1710,11 @@ SELECT * FROM Patients
 id is the primary key (column with unique values) for this table.
 Each row of this table contains an email. The emails will not contain uppercase letters.
  
-
 Write a solution to delete all duplicate emails, keeping only one unique email with the smallest id.
-
 For SQL users, please note that you are supposed to write a DELETE statement and not a SELECT one.
-
 For Pandas users, please note that you are supposed to modify Person in place.
-
 After running your script, the answer shown is the Person table. The driver will first compile and run your piece of code and then show the Person table. The final order of the Person table does not matter.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A46.
 **오답**
 DELETE FROM Person
@@ -1901,11 +1736,8 @@ DELETE A
 id is the primary key (column with unique values) for this table.
 Each row of this table contains information about the salary of an employee.
  
-
 Write a solution to find the second highest distinct salary from the Employee table. If there is no second highest salary, return null (return None in Pandas).
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A47.
 **오답**
 SELECT (CASE WHEN sal_rank = 2 then salary else null end) as SecondHighestSalary
@@ -1939,15 +1771,10 @@ SELECT (
 There is no primary key (column with unique values) for this table. It may contain duplicates.
 Each row of this table contains the product name and the date it was sold in a market.
  
-
 Write a solution to find for each date the number of different products sold and their names.
-
 The sold products names for each date should be sorted lexicographically.
-
 Return the result table ordered by sell_date.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A48.
 SELECT sell_date,
        count(distinct product) as num_sold,
@@ -1958,7 +1785,6 @@ SELECT sell_date,
 ------------------------------------------------------------------------------------------------------------------------
 /* Q49. List the Products Ordered in a Period
 Table: Products
-
 +------------------+---------+
 | Column Name      | Type    |
 +------------------+---------+
@@ -1969,9 +1795,7 @@ Table: Products
 product_id is the primary key (column with unique values) for this table.
 This table contains data about the company's products.
  
-
 Table: Orders
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -1983,13 +1807,9 @@ This table may have duplicate rows.
 product_id is a foreign key (reference column) to the Products table.
 unit is the number of products ordered in order_date.
  
-
 Write a solution to get the names of products that have at least 100 units ordered in February 2020 and their amount.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A49.
 SELECT a.product_name,
        sum(b.unit) as unit
@@ -2003,7 +1823,6 @@ EXTRACT(YEAR_MONTH FROM b.order_date) 보다 between and 쓰는게 Leap year, �
 ------------------------------------------------------------------------------------------------------------------------
 /* Q50. Find Users With Valid E-Mails
 Table: Users
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
@@ -2014,17 +1833,12 @@ Table: Users
 user_id is the primary key (column with unique values) for this table.
 This table contains information of the users signed up in a website. Some e-mails are invalid.
  
-
 Write a solution to find the users who have valid emails.
-
 A valid e-mail has a prefix name and a domain where:
-
 The prefix name is a string that may contain letters (upper or lower case), digits, underscore '_', period '.', and/or dash '-'. The prefix name must start with a letter.
 The domain is '@leetcode.com'.
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A50.
 SELECT * FROM Users
  where REGEXP_LIKE(mail, '^[:alpha:][:alnum:}_.-]+@leetcode.com}')
@@ -2040,7 +1854,6 @@ REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9._-]*@leetcode\\.com$', 'c');
 ------------------------------------------------------------------------------------------------------------------------
 /* Q51. Combine Two Tables
 Table: Person
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2051,9 +1864,7 @@ Table: Person
 personId is the primary key (column with unique values) for this table.
 This table contains information about the ID of some persons and their first and last names.
  
-
 Table: Address
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2065,13 +1876,9 @@ Table: Address
 addressId is the primary key (column with unique values) for this table.
 Each row of this table contains information about the city and state of one person with ID = PersonId.
  
-
 Write a solution to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A51.
 SELECT A.firstName,
        A.lastName,
@@ -2083,7 +1890,6 @@ SELECT A.firstName,
 ------------------------------------------------------------------------------------------------------------------------
 /* Q52. Nth Highest Salary
 Table: Employee
-
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -2092,12 +1898,9 @@ Table: Employee
 +-------------+------+
 id is the primary key (column with unique values) for this table.
 Each row of this table contains information about the salary of an employee.
- 
 
 Write a solution to find the nth highest distinct salary from the Employee table. If there are less than n distinct salaries, return null.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A52.
 **아예 못품**
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
@@ -2114,7 +1917,6 @@ END
 ------------------------------------------------------------------------------------------------------------------------
 /* Q53. Employees Earaning More Than Their Managers
 Table: Employee
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2125,14 +1927,10 @@ Table: Employee
 +-------------+---------+
 id is the primary key (column with unique values) for this table.
 Each row of this table indicates the ID of an employee, their name, salary, and the ID of their manager.
- 
 
 Write a solution to find the employees who earn more than their managers.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A53.
 SELECT A.name AS Employee
     FROM Employee A
@@ -2142,7 +1940,6 @@ SELECT A.name AS Employee
 ------------------------------------------------------------------------------------------------------------------------
 /* Q54. Rank Scores
 Table: Scores
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2151,24 +1948,20 @@ Table: Scores
 +-------------+---------+
 id is the primary key (column with unique values) for this table.
 Each row of this table contains the score of a game. Score is a floating point value with two decimal places.
- 
 
 Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:
-
 The scores should be ranked from the highest to the lowest.
 If there is a tie between two scores, both should have the same ranking.
 After a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no holes between ranks.
 Return the result table ordered by score in descending order.
 
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A54.
 select score,
        dense_rank() over (order by score desc) as 'rank'
     from Scores
         order by score desc
 및
-
 SELECT a.score,
        (SELECT count(DISTINCT b.score)
         from Scores b
@@ -2178,7 +1971,6 @@ SELECT a.score,
 ------------------------------------------------------------------------------------------------------------------------
 /* Q55. Duplicate Emails
 Table: Person
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2188,13 +1980,9 @@ Table: Person
 id is the primary key (column with unique values) for this table.
 Each row of this table contains an email. The emails will not contain uppercase letters.
  
-
 Write a solution to report all the duplicate emails. Note that it's guaranteed that the email field is not NULL.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A55.
 select email as Email
     from Person
@@ -2203,7 +1991,6 @@ select email as Email
 ------------------------------------------------------------------------------------------------------------------------
 /* Q56. Customers Who Never Order
 Table: Customers
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2213,9 +2000,7 @@ Table: Customers
 id is the primary key (column with unique values) for this table.
 Each row of this table indicates the ID and name of a customer.
  
-
 Table: Orders
-
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -2226,13 +2011,9 @@ id is the primary key (column with unique values) for this table.
 customerId is a foreign key (reference columns) of the ID from the Customers table.
 Each row of this table indicates the ID of an order and the ID of the customer who ordered it.
  
-
 Write a solution to find all customers who never order anything.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A56.
 SELECT A.name as Customers
     from Customers A
@@ -2246,7 +2027,6 @@ SELECT name as Customers
 ------------------------------------------------------------------------------------------------------------------------
 /* Q57. Department Highest Salary
 Table: Employee
-
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -2259,9 +2039,7 @@ id is the primary key (column with unique values) for this table.
 departmentId is a foreign key (reference columns) of the ID from the Department table.
 Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
  
-
 Table: Department
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -2271,13 +2049,9 @@ Table: Department
 id is the primary key (column with unique values) for this table. It is guaranteed that department name is not NULL.
 Each row of this table indicates the ID of a department and its name.
  
-
 Write a solution to find employees who have the highest salary in each of the departments.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A57.
 SELECT Department,
        Employee,
@@ -2304,7 +2078,6 @@ WHERE e.salary = (
 ------------------------------------------------------------------------------------------------------------------------
 /* Q58. Trips and Users
 Table: Trips
-
 +-------------+----------+
 | Column Name | Type     |
 +-------------+----------+
@@ -2320,7 +2093,6 @@ The table holds all taxi trips. Each trip has a unique id, while client_id and d
 Status is an ENUM (category) type of ('completed', 'cancelled_by_driver', 'cancelled_by_client').
 
 Table: Users
-
 +-------------+----------+
 | Column Name | Type     |
 +-------------+----------+
@@ -2333,13 +2105,9 @@ The table holds all users. Each user has a unique users_id, and role is an ENUM 
 banned is an ENUM (category) type of ('Yes', 'No').
 
 The cancellation rate is computed by dividing the number of canceled (by client or driver) requests with unbanned users by the total number of requests with unbanned users on that day.
-
 Write a solution to find the cancellation rate of requests with unbanned users (both client and driver must not be banned) each day between "2013-10-01" and "2013-10-03" with at least one trip. Round Cancellation Rate to two decimal points.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A58.
 SELECT a.request_at as 'Day',
        round((sum(case
@@ -2371,7 +2139,6 @@ SELECT a.request_at as 'Day',
 ------------------------------------------------------------------------------------------------------------------------
 /* Q59. Game Play Analysis 1
 Table: Activity
-
 +--------------+---------+
 | Column Name  | Type    |
 +--------------+---------+
@@ -2384,13 +2151,9 @@ Table: Activity
 This table shows the activity of players of some games.
 Each row is a record of a player who logged in and played a number of games (possibly 0) before logging out on someday using some device.
  
-
 Write a solution to find the first login date for each player.
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A59.
 SELECT player_id,
        min(event_date) as first_login
@@ -2409,11 +2172,8 @@ order_number is the primary key (column with unique values) for this table.
 This table contains information about the order ID and the customer ID.
 
 Write a solution to find the customer_number for the customer who has placed the largest number of orders.
-
 The test cases are generated so that exactly one customer will have placed more orders than any other customer.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A60.
 SELECT customer_number
     FROM Orders
@@ -2462,11 +2222,8 @@ sales_id is a foreign key (reference column) to sales_id from the SalesPerson ta
 Each row of this table contains information about one order. This includes the ID of the company, the ID of the salesperson, the date of the order, and the amount paid.
  
 Write a solution to find the names of all the salespersons who did not have any orders related to the company with the name "RED".
-
 Return the result table in any order.
-
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A61.
 SELECT name
     FROM SalesPerson
@@ -2495,8 +2252,7 @@ Each node in the tree can be one of three types:
 "Inner": If the node is neither a leaf node nor a root node.
 Write a solution to report the type of each node in the tree.
 Return the result table in any order.
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A62.
 SELECT id,
        CASE WHEN p_id is null then 'Root'
@@ -2520,8 +2276,7 @@ timestamp is the primary key (column with unique values) for this table.
  
 Write a solution to find all the pairs (actor_id, director_id) where the actor has cooperated with the director at least three times.
 Return the result table in any order.
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A63.
 SELECT actor_id,
        director_id
@@ -2544,8 +2299,7 @@ As the id increases, the date increases as well.
  
 Write a solution to display the records with three or more rows with consecutive id's, and the number of people is greater than or equal to 100 for each.
 Return the result table ordered by visit_date in ascending order.
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A64.
 아예못품
 WITH A AS (
@@ -2593,8 +2347,7 @@ The table contains information about an employee.
  
 Write a solution to swap all 'f' and 'm' values (i.e., change all 'f' values to 'm' and vice versa) with a single update statement and no intermediate temporary tables.
 Note that you must write a single update statement, do not write any select statement for this problem.
-The result format is in the following example.
-*/
+The result format is in the following example.*/
 A65.
 '신규'
 UPDATE Salary
