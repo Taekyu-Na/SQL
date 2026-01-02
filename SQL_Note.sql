@@ -4,6 +4,7 @@ MySQL에서 date 타입 필드에서 특정 연/월/일를 가져올때는 아�
 SELECT DATE_FORMAT(TEST, '%Y-%m')
 
 EXTRACT(YEAR/MONTH/DAY FROM TEST)도 가능
+YEAR/MONTH/DAY(TEST)도 가능
 
   '1.2 일자 더하기/빼기'
 MySQL에서 일자 더하고 뺄 때,
