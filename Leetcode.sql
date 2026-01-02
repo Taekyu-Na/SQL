@@ -2462,5 +2462,15 @@ Write a solution to find for each user, the join date and the number of orders t
 Return the result table in any order.
 The result format is in the following example.*/
 A67.
+SELECT A.user_id as buyer_id,
+       A.join_date,
+       sum(CASE
+            WHEN extract(YEAR FROM B.order_date) = '2019' THEN 1 ELSE 0 END) AS orders_in_2019
+    FROM Users A
+    LEFT OUTER JOIN Orders B
+    ON A.user_id = B.buyer_id
+        GROUP BY A.user_id, A.join_date
+'EXTRACT는 숫자를 반환하는데 비교는 ''문자열로 되어있음.
+EXTRACT 대신 BETWEEN AND로 하면 더 깔끔'
 
 
