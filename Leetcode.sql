@@ -2537,5 +2537,56 @@ SELECT A.name,
         GROUP BY A.id, A.name
             ORDER BY travelled_distance DESC, A.name
 ------------------------------------------------------------------------------------------------------------------------
-/* Q70. 
+/* Q70. Reformat Department Table
+Table: Department
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| revenue     | int     |
+| month       | varchar |
++-------------+---------+
+In SQL,(id, month) is the primary key of this table.
+The table has information about the revenue of each department per month.
+The month has values in ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].
+ 
+Reformat the table such that there is a department id column and a revenue column for each month.
+Return the result table in any order.
+The result format is in the following example.*/
+A70.
+SELECT id,
+       max(CASE WHEN month = 'Jan' THEN revenue ELSE NULL END) AS 'Jan_Revenue',
+       max(CASE WHEN month = 'Feb' THEN revenue ELSE NULL END) AS 'Feb_Revenue',
+       max(CASE WHEN month = 'Mar' THEN revenue ELSE NULL END) AS 'Mar_Revenue',
+       max(CASE WHEN month = 'Apr' THEN revenue ELSE NULL END) AS 'Apr_Revenue',
+       max(CASE WHEN month = 'May' THEN revenue ELSE NULL END) AS 'May_Revenue',
+       max(CASE WHEN month = 'Jun' THEN revenue ELSE NULL END) AS 'Jun_Revenue',
+       max(CASE WHEN month = 'Jul' THEN revenue ELSE NULL END) AS 'Jul_Revenue',
+       max(CASE WHEN month = 'Aug' THEN revenue ELSE NULL END) AS 'Aug_Revenue',
+       max(CASE WHEN month = 'Sep' THEN revenue ELSE NULL END) AS 'Sep_Revenue',
+       max(CASE WHEN month = 'Oct' THEN revenue ELSE NULL END) AS 'Oct_Revenue',
+       max(CASE WHEN month = 'Nov' THEN revenue ELSE NULL END) AS 'Nov_Revenue',
+       max(CASE WHEN month = 'Dec' THEN revenue ELSE NULL END) AS 'Dec_Revenue'
+    FROM Department
+        GROUP BY id
+MySQL은 PIVOT() 기능 미제공, Oracle/MS-SQL은 가능
+SELECT id,
+       Jan AS Jan_Revenue,
+       Feb AS Feb_Revenue,
+       Mar AS Mar_Revenue,
+       Apr AS Apr_Revenue,
+       May AS May_Revenue,
+       Jun AS Jun_Revenue,
+       Jul AS Jul_Revenue,
+       Aug AS Aug_Revenue,
+       Sep AS Sep_Revenue,
+       Oct AS Oct_Revenue,
+       Nov AS Nov_Revenue,
+       Dec AS Dec_Revenue
+    FROM Department
+        PIVOT (sum(revenue) FOR month IN (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec)) AS A
+------------------------------------------------------------------------------------------------------------------------
+/* Q7
+
+
 
