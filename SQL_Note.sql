@@ -44,6 +44,11 @@ NOT EXISTS는 컬럼을 비교해서 필터링하는 것이 아니라,
 /* 7. UPDATE */
 UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 업데이트 가능
 
+/* 8. PIVOT() */
+    'MySQL/MariaDB에서 제공하지 않는 기능. Oracle/MS SQL에서 기능 제공'
+PIVOT 함수는 집계함수가 필수
+
+    
 /* 그 외 */
   'SQL은 다중 비교 연산을 한 번에 해석하지 못함. (A = B = C 등)'
   'SELECT 'TEXT' as Column처럼 Literal 값을 필드값으로 반환할 수 있음' 
