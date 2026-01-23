@@ -2585,6 +2585,10 @@ SELECT id,
        Dec AS Dec_Revenue
     FROM Department
         PIVOT (sum(revenue) FOR month IN (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec)) AS A
+'하나의 값으로 줄이는 과정이 집계 함수가 됨'
+'FOR month는 month 컬럼의 값들을 가로 방향 컬럼 이름으로 쓰겠다는 뜻'
+'IN (Jan, Feb, Mar, ...)는 겨로가로 생성될 컬럼 이름'
+'SELECT 절에서 Alias 넣어 rename'
 ------------------------------------------------------------------------------------------------------------------------
 /* Q7
 
