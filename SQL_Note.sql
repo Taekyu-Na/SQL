@@ -47,7 +47,10 @@ UPDATE 테이블명 SET 필드명 = CASE 필드명 WHEN, ELSE, END로 다중행 
 /* 8. PIVOT() */
     'MySQL/MariaDB에서 제공하지 않는 기능. Oracle/MS SQL에서 기능 제공'
 PIVOT 함수는 집계함수가 필수
-
+PIVOT (
+    집계함수(값컬럼)
+    FOR 피벗컬럼 IN (컬럼목록)
+)
     
 /* 그 외 */
   'SQL은 다중 비교 연산을 한 번에 해석하지 못함. (A = B = C 등)'
