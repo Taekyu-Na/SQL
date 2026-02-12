@@ -2590,7 +2590,95 @@ SELECT id,
 'IN (Jan, Feb, Mar, ...)는 겨로가로 생성될 컬럼 이름'
 'SELECT 절에서 Alias 넣어 rename'
 ------------------------------------------------------------------------------------------------------------------------
-/* Q7
-
+/* Q71. Bank Account Summary 2
+Table: Users
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| account      | int     |
+| name         | varchar |
++--------------+---------+
+account is the primary key (column with unique values) for this table.
+Each row of this table contains the account number of each user in the bank.
+There will be no two users having the same name in the table.
+ 
+Table: Transactions
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| trans_id      | int     |
+| account       | int     |
+| amount        | int     |
+| transacted_on | date    |
++---------------+---------+
+trans_id is the primary key (column with unique values) for this table.
+Each row of this table contains all changes made to all accounts.
+amount is positive if the user received money and negative if they transferred money.
+All accounts start with a balance of 0.
+ 
+Write a solution to report the name and balance of users with a balance higher than 10000. The balance of an account is equal to the sum of the amounts of all transactions involving that account.
+Return the result table in any order.
+The result format is in the following example. */
+A71.
+SELECT A.name as NAME,
+       sum(B.amount) as BALANCE
+    FROM Users A
+    INNER JOIN Transactions B
+    ON A.account = B.account
+        GROUP BY A.account
+        HAVING sum(B.amount) > 10000
+------------------------------------------------------------------------------------------------------------------------
+/* Q72. Daily Leads and Partners
+Table: DailySales
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| date_id     | date    |
+| make_name   | varchar |
+| lead_id     | int     |
+| partner_id  | int     |
++-------------+---------+
+There is no primary key (column with unique values) for this table. It may contain duplicates.
+This table contains the date and the name of the product sold and the IDs of the lead and partner it was sold to.
+The name consists of only lowercase English letters.
+ 
+For each date_id and make_name, find the number of distinct lead_id's and distinct partner_id's.
+Return the result table in any order.
+The result format is in the following example.*/
+A72.
+SELECT date_id,
+       make_name,
+       count(DISTINCT lead_id) AS unique_leads,
+       count(DISTINCT partner_id) AS unique_partners
+    FROM DailySales
+        GROUP BY date_id, make_name
+------------------------------------------------------------------------------------------------------------------------
+/* Q73. Find Total Time Spent by Each Employee
+Table: Employees
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| emp_id      | int  |
+| event_day   | date |
+| in_time     | int  |
+| out_time    | int  |
++-------------+------+
+(emp_id, event_day, in_time) is the primary key (combinations of columns with unique values) of this table.
+The table shows the employees' entries and exits in an office.
+event_day is the day at which this event happened, in_time is the minute at which the employee entered the office, and out_time is the minute at which they left the office.
+in_time and out_time are between 1 and 1440.
+It is guaranteed that no two events on the same day intersect in time, and in_time < out_time.
+ 
+Write a solution to calculate the total time in minutes spent by each employee on each day at the office. Note that within one day, an employee can enter and leave more than once. The time spent in the office for a single entry is out_time - in_time.
+Return the result table in any order.
+The result format is in the following example.*/
+A73.
+SELECT event_day AS day,
+       emp_id,
+       sum(out_time-in_time) AS total_time
+    FROM Employees
+        GROUP BY emp_id, event_day
+------------------------------------------------------------------------------------------------------------------------
+/* Q74.
 
 
