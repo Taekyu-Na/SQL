@@ -2679,6 +2679,149 @@ SELECT event_day AS day,
     FROM Employees
         GROUP BY emp_id, event_day
 ------------------------------------------------------------------------------------------------------------------------
-/* Q74.
+/* Q74. Rearrange Products Table
+Table: Products
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_id  | int     |
+| store1      | int     |
+| store2      | int     |
+| store3      | int     |
++-------------+---------+
+product_id is the primary key (column with unique values) for this table.
+Each row in this table indicates the product's price in 3 different stores: store1, store2, and store3.
+If the product is not available in a store, the price will be null in that store's column.
+ 
+Write a solution to rearrange the Products table so that each row has (product_id, store, price). If a product is not available in a store, do not include a row with that product_id and store combination in the result table.
+Return the result table in any order.
+The result format is in the following example. */
+A74.
+SELECT product_id,
+       store,
+       price
+    FROM (
+        SELECT product_id,
+       'store1' AS store,
+       store1 AS price
+    FROM Products
+UNION
+SELECT product_id,
+       'store2' AS store,
+       store2 AS price
+    FROM Products
+UNION
+SELECT product_id,
+       'store3' AS store,
+       store3 AS price
+    FROM Products
+    ) Subq
+        WHERE price is not null
+'UNPIVOT 사용 가능'
+SELECT product_id,
+       store,
+       price
+    FROM Products
+    UNPIVOT (price FOR store IN (store1, store2, store3)) AS Subq
+'store는 store1, store2, store3 같은 컬럼명이 문자열로 들어감
+in (store1, store2, store3)는 행으로 행으로 변환할 대상 컬럼을 넣어줌
+price는 각 store 컬럼의 값이 들어감'
+------------------------------------------------------------------------------------------------------------------------
+/* Q75. Calculate Special Bonus
+Table: Employees
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| employee_id | int     |
+| name        | varchar |
+| salary      | int     |
++-------------+---------+
+employee_id is the primary key (column with unique values) for this table.
+Each row of this table indicates the employee ID, employee name, and salary.
+ 
+Write a solution to calculate the bonus of each employee. The bonus of an employee is 100% of their salary if the ID of the employee is an odd number and the employee's name does not start with the character 'M'. The bonus of an employee is 0 otherwise.
+Return the result table ordered by employee_id.
+The result format is in the following example. */
+A75.
+SELECT employee_id,
+       CASE WHEN employee_id mod 2 = 1 AND left(name, 1) <> 'M' THEN salary ELSE 0 END AS bonus
+    FROM Employees
+        ORDER BY employee_id
+------------------------------------------------------------------------------------------------------------------------
+/* Q76. The Latest Login in 2020
+Table: Logins
++----------------+----------+
+| Column Name    | Type     |
++----------------+----------+
+| user_id        | int      |
+| time_stamp     | datetime |
++----------------+----------+
+(user_id, time_stamp) is the primary key (combination of columns with unique values) for this table.
+Each row contains information about the login time for the user with ID user_id.
+ 
+Write a solution to report the latest login for all users in the year 2020. Do not include the users who did not login in 2020.
+Return the result table in any order.
+The result format is in the following example. */
+A76.
+SELECT user_id,
+       max(time_stamp) AS last_stamp
+    FROM Logins
+        WHERE YEAR(time_stamp) = '2020'
+        GROUP BY user_id
+------------------------------------------------------------------------------------------------------------------------
+/* Q77. Employees With Missing Information
+Table: Employees
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| employee_id | int     |
+| name        | varchar |
++-------------+---------+
+employee_id is the column with unique values for this table.
+Each row of this table indicates the name of the employee whose ID is employee_id.
+ 
+Table: Salaries
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| employee_id | int     |
+| salary      | int     |
++-------------+---------+
+employee_id is the column with unique values for this table.
+Each row of this table indicates the salary of the employee whose ID is employee_id.
+ 
+Write a solution to report the IDs of all the employees with missing information. The information of an employee is missing if:
+The employee's name is missing, or
+The employee's salary is missing.
+Return the result table ordered by employee_id in ascending order.
+The result format is in the following example.*/
+A77.
+SELECT employee_id
+    FROM Employees
+        WHERE employee_id NOT IN (SELECT DISTINCT(employee_id) FROM Salaries)
+UNION
+SELECT employee_id
+    FROM Salaries
+        WHERE employee_id NOT IN (SELECT DISTINCT(employee_id) FROM EMployees)
+ORDER BY employee_id
+------------------------------------------------------------------------------------------------------------------------
+/* Q78. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
